@@ -39,7 +39,7 @@ export default function RootLayout({
         inter.variable,
       )}
     >
-      <body className="min-h-full w-screen flex flex-col bg-slate-200 overflow-x-hidden overflow-hidden">
+      <body className="min-h-full w-screen flex flex-col bg-slate-200 overflow-x-hidden">
         <BalanceProvider>
           <Navbar />
           {children}
