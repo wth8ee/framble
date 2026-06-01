@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  BarChart2,
-  Bomb,
-  Diamond,
-  HelpCircle,
-  ShieldCheck,
-} from "lucide-react";
+import { BarChart2 } from "lucide-react";
 import { useMines } from "@/hooks/useMines";
 import { MinesMenu } from "@/components/MinesMenu";
 import { MinesField } from "@/components/MinesField";
@@ -14,6 +8,7 @@ import { useBalance } from "@/context/balanceContext";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { LiveStatsWindow } from "@/components/LiveStatsWindow";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function MinesPage() {
   const {
@@ -36,58 +31,58 @@ export default function MinesPage() {
   } = useMines();
 
   const [isStatsOpen, setIsStatsOpen] = useState(false);
-
   const { balance, setBalance } = useBalance();
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-slate-950 text-slate-50 py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center relative overflow-hidden">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none" />
+    <ScrollArea className="h-[calc(100vh-4rem)] w-full bg-slate-950 text-slate-50 selection:bg-emerald-500 selection:text-slate-950">
+      <div className="min-h-[calc(100vh-4rem)] py-6 pb-20 px-4 sm:px-6 lg:px-8 flex items-start md:items-center justify-center relative overflow-hidden w-full">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none" />
 
-      <Button
-        onClick={() => setIsStatsOpen(!isStatsOpen)}
-        variant="outline"
-        className="fixed bottom-4 left-4 z-40 border-slate-800 bg-slate-900 hover:bg-slate-800 text-emerald-400 gap-2"
-      >
-        <BarChart2 className="w-4 h-4" />
-        Stats
-      </Button>
+        <Button
+          onClick={() => setIsStatsOpen(!isStatsOpen)}
+          variant="outline"
+          className="fixed bottom-4 left-4 z-40 border-slate-800 bg-slate-900 hover:bg-slate-800 text-emerald-400 gap-2"
+        >
+          <BarChart2 className="w-4 h-4" />
+          Stats
+        </Button>
 
-      {/* Само окно */}
-      <LiveStatsWindow
-        balanceStats={balanceStats}
-        isOpen={isStatsOpen}
-        onClose={() => setIsStatsOpen(false)}
-      />
-
-      <div className="w-full max-w-5xl bg-slate-900/40 border border-slate-900 rounded-xl p-4 md:p-6 backdrop-blur-md grid grid-cols-1 md:grid-cols-12 gap-6 z-10">
-        <MinesMenu
-          gameRunning={gameRunning}
-          startGame={startGame}
-          setBombsNumber={setBombsNumber}
-          bombsNumber={bombsNumber}
-          coefficient={coefficient}
-          nextCoefficient={nextCoefficient}
-          cells={cells}
-          bet={bet}
-          handleBetChange={handleBetChange}
-          handleBetBlur={handleBetBlur}
-          setBet={setBet}
-          balance={balance}
-          setBalance={setBalance}
-          cashOut={cashOut}
-          lastBet={lastBet}
+        <LiveStatsWindow
+          balanceStats={balanceStats}
+          isOpen={isStatsOpen}
+          onClose={() => setIsStatsOpen(false)}
         />
 
-        <MinesField
-          gameRunning={gameRunning}
-          cells={cells}
-          bombs={bombs}
-          handleCellClick={handleCellClick}
-          bet={bet}
-          coefficient={coefficient}
-          lastBet={lastBet}
-        />
+        <div className="w-full max-w-5xl bg-slate-900/40 border border-slate-900 rounded-xl p-4 md:p-6 backdrop-blur-md grid grid-cols-1 md:grid-cols-12 gap-6 z-10 my-auto">
+          <MinesMenu
+            gameRunning={gameRunning}
+            startGame={startGame}
+            setBombsNumber={setBombsNumber}
+            bombsNumber={bombsNumber}
+            coefficient={coefficient}
+            nextCoefficient={nextCoefficient}
+            cells={cells}
+            bet={bet}
+            handleBetChange={handleBetChange}
+            handleBetBlur={handleBetBlur}
+            setBet={setBet}
+            balance={balance}
+            setBalance={setBalance}
+            cashOut={cashOut}
+            lastBet={lastBet}
+          />
+
+          <MinesField
+            gameRunning={gameRunning}
+            cells={cells}
+            bombs={bombs}
+            handleCellClick={handleCellClick}
+            bet={bet}
+            coefficient={coefficient}
+            lastBet={lastBet}
+          />
+        </div>
       </div>
-    </div>
+    </ScrollArea>
   );
 }
