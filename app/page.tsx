@@ -7,13 +7,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function HomePage() {
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-slate-950 text-slate-50 flex flex-col justify-between selection:bg-emerald-500 selection:text-slate-950">
+    <ScrollArea className="h-[calc(100vh-4rem)] **:data-radix-scroll-area-scrollbar:z-50 bg-slate-950 text-slate-50 flex flex-col justify-between selection:bg-emerald-500 selection:text-slate-950">
       <main className="w-full overflow-x-hidden flex flex-col flex-1">
         <section className="relative py-12 md:py-20 px-4 sm:px-6 lg:px-8 text-center max-w-5xl mx-auto flex flex-col items-center justify-center flex-1 z-10 w-full">
-          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[320px] sm:max-w-[800px] aspect-square bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.12)_0%,rgba(16,185,129,0)_70%)] rounded-full blur-[40px] sm:blur-[60px] pointer-events-none -z-10" />
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[320px] sm:max-w-200 aspect-square bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.12)_0%,rgba(16,185,129,0)_70%)] rounded-full blur-[40px] sm:blur-[60px] pointer-events-none -z-10" />
 
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-[10px] sm:text-xs text-emerald-400 font-medium mb-6 animate-pulse">
             <Zap className="w-3 h-3" /> Instantly Provably Fair Gaming
@@ -58,7 +59,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="border-y border-slate-900 bg-slate-900/20 backdrop-blur-sm py-4 sm:py-6 z-10">
+        <section className="border-y border-slate-900 bg-slate-900/20 backdrop-blur-sm py-4 sm:py-6 z-10 mx-4">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-center">
             <div>
               <div className="text-lg sm:text-2xl font-bold text-slate-100">
@@ -182,6 +183,6 @@ export default function HomePage() {
           <p className="text-slate-500 font-medium">18+ | Gamble Responsibly</p>
         </div>
       </footer>
-    </div>
+    </ScrollArea>
   );
 }

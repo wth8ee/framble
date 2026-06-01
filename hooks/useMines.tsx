@@ -12,9 +12,19 @@ export function useMines() {
   const [bombsNumber, setBombsNumber] = useState(3);
   const [bet, setBet] = useState("1.00");
   const [lastBet, setLastBet] = useState<null | string>(null);
+  const [balanceStats, setBalanceStats] = useState<number[]>([]);
 
   const coefficient = getCofficient(bombsNumber, cells);
   const nextCoefficient = getNextCofficient(bombsNumber, cells);
+
+  // function resetBalance(
+  //   balance: number,
+  //   setBalance: (newBalance: number) => void,
+  // ) {
+  //   if (!gameRunning && balance < 1) {
+  //     setBalance(1000);
+  //   }
+  // }
 
   function handleBetChange(e: React.ChangeEvent<HTMLInputElement>) {
     let val = e.target.value;
@@ -47,6 +57,9 @@ export function useMines() {
         newCells[index] = "bomb";
         playSound("bomb.ogg");
         setGameRunning(false);
+        const currentProfit =
+          balanceStats.length > 0 ? balanceStats[balanceStats.length - 1] : 0;
+        setBalanceStats([...balanceStats, currentProfit - Number(lastBet)]);
       } else {
         newCells[index] = "diamond";
         playSound("diamond.ogg");
@@ -63,6 +76,9 @@ export function useMines() {
       setGameRunning(true);
       const generatedBombs = selectFromMany(bombsNumber, 25);
       setBombs(generatedBombs);
+      if (balanceStats.length === 0) {
+        setBalanceStats([0]);
+      }
     }
   }
 
@@ -71,6 +87,10 @@ export function useMines() {
     const win = parseFloat(bet) * coefficient;
     setBalance(balance + win);
     playSound("cashout.ogg");
+    const profitFromThisRound = win - Number(lastBet);
+    const previousProfit =
+      balanceStats.length > 0 ? balanceStats[balanceStats.length - 1] : 0;
+    setBalanceStats([...balanceStats, previousProfit + profitFromThisRound]);
   }
 
   return {
@@ -89,5 +109,6 @@ export function useMines() {
     setBet,
     cashOut,
     lastBet,
+    balanceStats,
   };
 }

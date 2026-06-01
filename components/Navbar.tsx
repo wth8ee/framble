@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { useBalance } from "@/context/balanceContext";
 
 export function Navbar() {
-  const { balance } = useBalance();
+  const { balance, setBalance } = useBalance();
   const pathname = usePathname();
 
   return (
@@ -44,7 +44,10 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2 md:gap-4">
-          <div className="flex items-center gap-1 bg-slate-900 border border-slate-800 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs md:text-sm font-bold text-emerald-400">
+          <div
+            onClick={() => {}}
+            className="flex items-center gap-1 bg-slate-900 border border-slate-800 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs md:text-sm font-bold text-emerald-400"
+          >
             <span>${balance.toFixed(2)}</span>
           </div>
           <Button

@@ -1,10 +1,19 @@
 "use client";
 
-import { Bomb, Diamond, HelpCircle, ShieldCheck } from "lucide-react";
+import {
+  BarChart2,
+  Bomb,
+  Diamond,
+  HelpCircle,
+  ShieldCheck,
+} from "lucide-react";
 import { useMines } from "@/hooks/useMines";
 import { MinesMenu } from "@/components/MinesMenu";
 import { MinesField } from "@/components/MinesField";
 import { useBalance } from "@/context/balanceContext";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { LiveStatsWindow } from "@/components/LiveStatsWindow";
 
 export default function MinesPage() {
   const {
@@ -23,13 +32,32 @@ export default function MinesPage() {
     setBet,
     cashOut,
     lastBet,
+    balanceStats,
   } = useMines();
+
+  const [isStatsOpen, setIsStatsOpen] = useState(false);
 
   const { balance, setBalance } = useBalance();
 
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-slate-950 text-slate-50 py-8 px-4 sm:px-6 lg:px-8 flex items-center justify-center relative overflow-hidden">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none" />
+
+      <Button
+        onClick={() => setIsStatsOpen(!isStatsOpen)}
+        variant="outline"
+        className="fixed bottom-4 left-4 z-40 border-slate-800 bg-slate-900 hover:bg-slate-800 text-emerald-400 gap-2"
+      >
+        <BarChart2 className="w-4 h-4" />
+        Stats
+      </Button>
+
+      {/* Само окно */}
+      <LiveStatsWindow
+        balanceStats={balanceStats}
+        isOpen={isStatsOpen}
+        onClose={() => setIsStatsOpen(false)}
+      />
 
       <div className="w-full max-w-5xl bg-slate-900/40 border border-slate-900 rounded-xl p-4 md:p-6 backdrop-blur-md grid grid-cols-1 md:grid-cols-12 gap-6 z-10">
         <MinesMenu
