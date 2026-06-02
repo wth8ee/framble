@@ -12,6 +12,24 @@ import {
 } from "@/components/ui/select";
 import { countDiamonds } from "@/lib/mines/countDiamonds";
 import { Coins } from "lucide-react";
+
+interface MinesMenuProps {
+  gameRunning: boolean;
+  startGame: () => void;
+  setBombsNumber: (bombsNumber: number) => void;
+  bombsNumber: number;
+  coefficient: number;
+  nextCoefficient: number;
+  cells: any[];
+  bet: string;
+  handleBetChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleBetBlur: () => void;
+  setBet: (bet: string) => void;
+  balance: number;
+  cashOut: () => void;
+  lastBet: string | null;
+}
+
 export function MinesMenu({
   gameRunning,
   startGame,
@@ -25,10 +43,9 @@ export function MinesMenu({
   handleBetBlur,
   setBet,
   balance,
-  setBalance,
   cashOut,
   lastBet,
-}) {
+}: MinesMenuProps) {
   const diamonds = countDiamonds(cells);
 
   const buttonState = !gameRunning
@@ -140,7 +157,7 @@ export function MinesMenu({
           <div className="flex justify-between">
             <span>Current Profit:</span>
             <span className="text-emerald-400 font-bold">
-              +${(lastBet * (coefficient - 1)).toFixed(2)} (
+              +${(Number(lastBet) * (coefficient - 1)).toFixed(2)} (
               {coefficient.toFixed(2)}
               x)
             </span>
@@ -159,10 +176,10 @@ export function MinesMenu({
           disabled={buttonState === "Pick a Tile"}
           onClick={() => {
             if (!gameRunning) {
-              startGame(balance, setBalance);
+              startGame();
             } else {
               if (buttonState === "Cash Out") {
-                cashOut(balance, setBalance);
+                cashOut();
               }
             }
           }}

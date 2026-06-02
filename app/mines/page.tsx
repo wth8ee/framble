@@ -2,8 +2,8 @@
 
 import { BarChart2 } from "lucide-react";
 import { useMines } from "@/hooks/useMines";
-import { MinesMenu } from "@/components/MinesMenu";
-import { MinesField } from "@/components/MinesField";
+import { MinesMenu } from "@/components/mines/MinesMenu";
+import { MinesField } from "@/components/mines/MinesField";
 import { useBalance } from "@/context/balanceContext";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -28,24 +28,15 @@ export default function MinesPage() {
     cashOut,
     lastBet,
     balanceStats,
+    balance,
   } = useMines();
 
   const [isStatsOpen, setIsStatsOpen] = useState(false);
-  const { balance, setBalance } = useBalance();
 
   return (
     <ScrollArea className="h-[calc(100vh-4rem)] w-full bg-slate-950 text-slate-50 selection:bg-emerald-500 selection:text-slate-950">
       <div className="min-h-[calc(100vh-4rem)] py-6 pb-20 px-4 sm:px-6 lg:px-8 flex items-start md:items-center justify-center relative overflow-hidden w-full">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none" />
-
-        <Button
-          onClick={() => setIsStatsOpen(!isStatsOpen)}
-          variant="outline"
-          className="fixed bottom-4 left-4 z-40 border-slate-800 bg-slate-900 hover:bg-slate-800 text-emerald-400 gap-2"
-        >
-          <BarChart2 className="w-4 h-4" />
-          Stats
-        </Button>
 
         <LiveStatsWindow
           balanceStats={balanceStats}
@@ -67,7 +58,6 @@ export default function MinesPage() {
             handleBetBlur={handleBetBlur}
             setBet={setBet}
             balance={balance}
-            setBalance={setBalance}
             cashOut={cashOut}
             lastBet={lastBet}
           />

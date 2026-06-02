@@ -1,30 +1,26 @@
 "use client";
 
-import { getCofficient, getNextCofficient } from "@/lib/mines/getCoeficcient";
-import { selectFromMany } from "@/lib/mines/selectFromMany";
+import {
+  getMinesCofficient,
+  getNextCofficient,
+} from "@/lib/mines/getMinesCoeficcient";
+import { selectFromMany } from "@/lib/shared/selectFromMany";
 import { playSound } from "@/lib/playSound";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
+import { useBalance } from "@/context/balanceContext";
 
 export function useMines() {
+  const { balance, setBalance, balanceStats, setBalanceStats } = useBalance();
+
   const [cells, setCells] = useState(Array(25).fill(null));
   const [bombs, setBombs] = useState<number[]>([]);
   const [gameRunning, setGameRunning] = useState(false);
   const [bombsNumber, setBombsNumber] = useState(3);
   const [bet, setBet] = useState("1.00");
   const [lastBet, setLastBet] = useState<null | string>(null);
-  const [balanceStats, setBalanceStats] = useState<number[]>([]);
 
-  const coefficient = getCofficient(bombsNumber, cells);
+  const coefficient = getMinesCofficient(bombsNumber, cells);
   const nextCoefficient = getNextCofficient(bombsNumber, cells);
-
-  // function resetBalance(
-  //   balance: number,
-  //   setBalance: (newBalance: number) => void,
-  // ) {
-  //   if (!gameRunning && balance < 1) {
-  //     setBalance(1000);
-  //   }
-  // }
 
   function handleBetChange(e: React.ChangeEvent<HTMLInputElement>) {
     let val = e.target.value;
@@ -68,10 +64,10 @@ export function useMines() {
     }
   }
 
-  function startGame(balance: number, setBalance: (val: number) => void) {
-    if (parseFloat(bet) <= balance) {
+  function startGame() {
+    if (Number(bet) <= balance || bet === balance.toFixed(2)) {
       setLastBet(bet);
-      setBalance(balance - parseFloat(bet));
+      setBalance(balance - Number(bet));
       setCells(Array(25).fill(null));
       setGameRunning(true);
       const generatedBombs = selectFromMany(bombsNumber, 25);
@@ -82,11 +78,10 @@ export function useMines() {
     }
   }
 
-  function cashOut(balance: number, setBalance: (val: number) => void) {
+  function cashOut() {
     setGameRunning(false);
     const win = parseFloat(bet) * coefficient;
     setBalance(balance + win);
-    playSound("cashout.ogg");
     const profitFromThisRound = win - Number(lastBet);
     const previousProfit =
       balanceStats.length > 0 ? balanceStats[balanceStats.length - 1] : 0;
@@ -110,5 +105,6 @@ export function useMines() {
     cashOut,
     lastBet,
     balanceStats,
+    balance,
   };
 }

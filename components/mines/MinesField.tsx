@@ -3,7 +3,17 @@
 import { Bomb, Diamond, HelpCircle, ShieldCheck } from "lucide-react";
 import { ActiveCells } from "./ActiveCells";
 import { RevealedCells } from "./RevealedCells";
-import { WinBanner } from "./WinBanner";
+import { WinBanner } from ".././WinBanner";
+
+interface MinesFieldProps {
+  cells: any[];
+  bombs: number[];
+  handleCellClick: (index: number) => void;
+  gameRunning: boolean;
+  coefficient: number;
+  bet: string;
+  lastBet: string | null;
+}
 
 export function MinesField({
   cells,
@@ -13,7 +23,7 @@ export function MinesField({
   coefficient,
   bet,
   lastBet,
-}) {
+}: MinesFieldProps) {
   const gameEnded =
     cells.includes("bomb") || (cells.includes("diamond") && !gameRunning);
   const isWin = gameEnded && !cells.includes("bomb");
@@ -24,7 +34,7 @@ export function MinesField({
         {isWin && (
           <WinBanner
             multiplier={coefficient}
-            winAmount={lastBet * coefficient}
+            winAmount={Number(lastBet) * coefficient}
           />
         )}
 

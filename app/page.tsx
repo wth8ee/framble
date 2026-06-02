@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { ArrowRight, Bomb, ShieldCheck, Zap, Coins } from "lucide-react";
+import {
+  ArrowRight,
+  Bomb,
+  ShieldCheck,
+  Zap,
+  Coins,
+  Gamepad2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -21,17 +28,17 @@ export default function HomePage() {
           </div>
 
           <h1 className="text-3xl sm:text-6xl font-black tracking-tight max-w-3xl leading-none mb-6 uppercase">
-            Dodge the{" "}
+            Master the{" "}
             <span className="bg-linear-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent">
-              Mines
+              Arcade
             </span>
             .<br />
             Multiply your cash.
           </h1>
 
           <p className="text-slate-400 text-sm sm:text-lg max-w-xl mb-10 font-normal px-2">
-            The ultimate game of risk and reward. Uncover the gems, avoid the
-            explosives, and cash out before it's too late.
+            The ultimate hub for high-stakes instant games. Choose your
+            challenge, ride the multipliers, and cash out before it's too late.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto justify-center px-4 sm:px-0">
@@ -41,10 +48,10 @@ export default function HomePage() {
               className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold px-8 text-sm sm:text-md shadow-lg shadow-emerald-500/20 group w-full sm:w-auto"
             >
               <Link
-                href="/mines"
+                href="/games"
                 className="flex items-center justify-center gap-2"
               >
-                Play MINES Now
+                Explore Games
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
@@ -52,7 +59,7 @@ export default function HomePage() {
               asChild
               size="lg"
               variant="outline"
-              className="border-slate-800 bg-slate-900/50 hover:bg-slate-900 text-slate-300 px-8 text-sm sm:text-md w-full sm:w-auto"
+              className="border-slate-800 bg-slate-900/50 hover:bg-slate-900 hover:text-slate-300 text-slate-300 px-8 text-sm sm:text-md w-full sm:w-auto"
             >
               <Link href="#how-to-play">How it works</Link>
             </Button>
@@ -102,10 +109,11 @@ export default function HomePage() {
         >
           <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
             <h2 className="text-xl sm:text-3xl font-bold tracking-tight mb-3 uppercase">
-              Why Play Our Mines?
+              Why Play With Us?
             </h2>
             <p className="text-slate-400 text-xs sm:text-base">
-              Simple mechanics, massive multipliers, and complete transparency.
+              Diverse game modes, massive multipliers, and complete
+              transparency.
             </p>
           </div>
 
@@ -113,14 +121,14 @@ export default function HomePage() {
             <Card className="bg-slate-900/40 border-slate-900 backdrop-blur-sm">
               <CardHeader className="p-5 sm:p-6">
                 <div className="p-2.5 w-fit rounded-lg bg-emerald-500/10 text-emerald-400 mb-2">
-                  <Bomb className="w-5 h-5 sm:w-6 sm:h-6" />
+                  <Gamepad2 className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
                 <CardTitle className="text-slate-100 text-base sm:text-lg">
                   Custom Risk
                 </CardTitle>
                 <CardDescription className="text-slate-400 text-xs sm:text-sm">
-                  Choose from 1 to 24 mines on the field. More mines mean higher
-                  risk and astronomical multipliers.
+                  Control your volatility across multiple titles. Adjust
+                  settings for steady small wins or astronomical multipliers.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -134,8 +142,8 @@ export default function HomePage() {
                   100% Provably Fair
                 </CardTitle>
                 <CardDescription className="text-slate-400 text-xs sm:text-sm">
-                  Every round is cryptographically secure. Verify the fairness
-                  of your grid generation anytime.
+                  Every round in every game is cryptographically secure. Verify
+                  the fairness of your outcomes anytime.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -149,8 +157,8 @@ export default function HomePage() {
                   Instant Cashout
                 </CardTitle>
                 <CardDescription className="text-slate-400 text-xs sm:text-sm">
-                  Hit one correct tile or ten—it doesn't matter. Take your
-                  profit instantly at any point during the game.
+                  No artificial delays or locked balances. Secure your profits
+                  and withdraw your cash instantly at any point.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -163,7 +171,7 @@ export default function HomePage() {
               Ready to test your luck?
             </h3>
             <p className="text-slate-400 max-w-md mb-6 text-[11px] sm:text-sm">
-              Configure your mines, set your bet size, and start climbing the
+              Pick your favorite game, set your bet size, and start climbing the
               multiplier ladder.
             </p>
             <Button
@@ -171,16 +179,29 @@ export default function HomePage() {
               size="lg"
               className="bg-slate-50 text-slate-950 hover:bg-slate-200 font-bold px-8 text-sm sm:text-base w-full sm:w-auto"
             >
-              <Link href="/mines">Start Playing</Link>
+              <Link href="/games">Start Playing</Link>
             </Button>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-slate-900 bg-slate-950 py-6 text-center text-[11px] text-slate-600 z-10">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-3">
-          <p>© 2026 MinesCasino. All rights reserved.</p>
-          <p className="text-slate-500 font-medium">18+ | Gamble Responsibly</p>
+      <footer className="border-t border-slate-900 bg-slate-950 py-8 text-center text-[11px] text-slate-600 z-10 mx-4">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col items-center gap-4">
+          <p className="max-w-2xl text-slate-500 leading-relaxed balance">
+            <span className="text-emerald-500 font-semibold uppercase">
+              Disclaimer:
+            </span>{" "}
+            This is a non-commercial educational project built for demonstration
+            purposes only. No real money operations, deposits, or gambling
+            activities are supported. All in-game balances are purely fictional.
+          </p>
+
+          <div className="w-full flex flex-col sm:flex-row justify-between items-center gap-3 border-t border-slate-900/50 pt-4">
+            <p>© 2026 Framble-X. Demo Project.</p>
+            <p className="text-slate-500 font-medium">
+              Simulation Game | Play Responsibly
+            </p>
+          </div>
         </div>
       </footer>
     </ScrollArea>

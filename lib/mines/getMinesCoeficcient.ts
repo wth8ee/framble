@@ -1,4 +1,4 @@
-export function getCofficient(bombs: number, cells: any[]) {
+export function getMinesCofficient(bombs: number, cells: any[]) {
   const diamonds = cells.filter((cell) => cell === "diamond").length;
 
   let coefficient = 1;

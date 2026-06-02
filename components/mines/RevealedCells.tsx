@@ -2,11 +2,9 @@ import { Bomb, Diamond } from "lucide-react";
 
 export function RevealedCells({
   cells,
-  handleCellClick,
   bombs,
 }: {
   cells: any[];
-  handleCellClick: (index: number) => void;
   bombs: number[];
 }) {
   return cells.map((cell, index) => {
