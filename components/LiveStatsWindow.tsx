@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Rnd } from "react-rnd";
-import { X, Move, BarChart2, TrendingUp } from "lucide-react";
+import { X, Move, BarChart2, TrendingUp, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   ResponsiveContainer,
@@ -18,12 +18,14 @@ interface LiveStatsWindowProps {
   isOpen: boolean;
   onClose: () => void;
   balanceStats: number[];
+  setBalanceStats: (val: number[]) => void;
 }
 
 export function LiveStatsWindow({
   isOpen,
   onClose,
   balanceStats,
+  setBalanceStats,
 }: LiveStatsWindowProps) {
   const [size, setSize] = useState({ width: 360, height: 340 });
   const [position, setPosition] = useState({ x: 100, y: 150 });
@@ -50,6 +52,10 @@ export function LiveStatsWindow({
 
   const roundedOffset = `${zeroOffset.toFixed(2)}%`;
 
+  const handleReset = () => {
+    setBalanceStats([]);
+  };
+
   return (
     <Rnd
       size={{ width: size.width, height: size.height }}
@@ -74,8 +80,20 @@ export function LiveStatsWindow({
             <BarChart2 className="w-4 h-4" />
             <span>Live Stats</span>
           </div>
+
           <div className="flex items-center gap-1">
-            <Move className="w-3.5 h-3.5 opacity-40 mr-1" />
+            <Move className="w-3.5 h-3.5 opacity-40 mr-2" />
+
+            <Button
+              onClick={handleReset}
+              variant="ghost"
+              size="icon"
+              title="Reset Stats"
+              className="w-6 h-6 text-slate-500 hover:text-rose-400 hover:bg-rose-500/10 rounded-md transition-colors"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+            </Button>
+
             <Button
               onClick={onClose}
               variant="ghost"
@@ -88,7 +106,7 @@ export function LiveStatsWindow({
         </div>
 
         <div className="flex-1 p-4 flex flex-col justify-between overflow-hidden bg-slate-950/40">
-          {chartData.length <= 1 ? (
+          {chartData.length <= 0 ? (
             <div className="flex-1 border border-dashed border-slate-900 rounded-lg flex flex-col items-center justify-center text-slate-500 text-xs gap-2">
               <TrendingUp className="w-5 h-5 opacity-30" />
               <span className="font-medium tracking-wide uppercase text-[10px]">

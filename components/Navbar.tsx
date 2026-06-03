@@ -7,8 +7,21 @@ import { usePathname } from "next/navigation";
 import { useBalance } from "@/context/balanceContext";
 
 export function Navbar() {
-  const { balance, isStatsOpen, setIsStatsOpen } = useBalance();
+  const {
+    balance,
+    isStatsOpen,
+    setIsStatsOpen,
+    balanceStats,
+    setBalanceStats,
+    setBalance,
+  } = useBalance();
   const pathname = usePathname();
+
+  function handleBalanceReset() {
+    if (balance < 1000) {
+      setBalance(1000);
+    }
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-900 bg-slate-950">
@@ -66,9 +79,12 @@ export function Navbar() {
             <span>Stats</span>
           </Button>
 
-          <div className="flex h-8 md:h-9 items-center gap-1 bg-slate-900 border border-slate-800 px-2 md:px-3 rounded-lg text-xs md:text-sm font-bold text-emerald-400 select-none transition-all duration-200 hover:bg-slate-800/80 hover:text-emerald-300 active:scale-95 shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)]">
+          <Button
+            onClick={handleBalanceReset}
+            className="flex h-8 md:h-9 items-center gap-1 bg-slate-900 border border-slate-800 px-2 md:px-3 rounded-lg text-xs md:text-sm font-bold text-emerald-400 select-none transition-all duration-200 hover:bg-slate-800/80 hover:text-emerald-300 active:scale-95 shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)]"
+          >
             <span>${balance.toFixed(2)}</span>
-          </div>
+          </Button>
 
           <Button
             size="sm"

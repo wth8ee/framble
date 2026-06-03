@@ -35,6 +35,7 @@ export function BalanceProvider({ children }: { children: ReactNode }) {
     >
       {children}
       <LiveStatsWindow
+        setBalanceStats={setBalanceStats}
         isOpen={isStatsOpen}
         onClose={() => setIsStatsOpen(false)}
         balanceStats={balanceStats}

@@ -72,7 +72,7 @@ export function MinesMenu({
               value={bet}
               onChange={handleBetChange}
               onBlur={handleBetBlur}
-              className="bg-slate-900 border-slate-800 text-slate-100 font-bold pl-3 pr-20 h-10 focus-visible:ring-emerald-500"
+              className="bg-slate-900 border-slate-800 text-slate-100 font-bold pl-3 pr-20 h-10 focus-visible:ring-emerald-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             />
             <div className="absolute right-1 flex gap-1">
               <Button
@@ -112,6 +112,23 @@ export function MinesMenu({
                 className="h-8 px-2 text-xs text-slate-400 hover:bg-slate-800 hover:text-slate-200"
               >
                 2x
+              </Button>
+              <Button
+                onClick={() => {
+                  if (balance > 100000) {
+                    setBet("100000.00");
+                  } else if (balance >= 1) {
+                    setBet(balance.toFixed(2));
+                  } else {
+                    setBet("1.00");
+                  }
+                }}
+                disabled={gameRunning}
+                variant="ghost"
+                size="sm"
+                className="h-8 px-1.5 text-[10px] font-extrabold text-emerald-400 hover:bg-slate-800 hover:text-emerald-300"
+              >
+                MAX
               </Button>
             </div>
           </div>
