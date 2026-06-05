@@ -6,7 +6,7 @@ import { LiveStatsWindow } from "@/components/LiveStatsWindow";
 
 interface BalanceContextType {
   balance: number;
-  setBalance: (val: number) => void;
+  setBalance: Dispatch<SetStateAction<number>>;
   balanceStats: number[];
   setBalanceStats: Dispatch<SetStateAction<number[]>>;
   isStatsOpen: boolean;

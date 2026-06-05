@@ -96,7 +96,7 @@ export function useKeno() {
       setGameRunning(true);
       setIsWinBannerOpen(false);
       setLastBet(bet);
-      setBalance(balanceAfterBet);
+      setBalance((prev: number) => prev - Number(bet));
       setBalanceStats((prev) => (prev.length === 0 ? [0] : prev));
       const systemChosenIndexes = selectFromMany(10, 40);
       const systemChosen = systemChosenIndexes.map((index) => index + 1);
@@ -140,7 +140,7 @@ export function useKeno() {
           setCurrentMultiplier(finalMultiplier);
           setIsWinBannerOpen(true);
           const win = Number(currentBet) * finalMultiplier;
-          setBalance(balanceAfterBet + win);
+          setBalance((prev) => prev + win);
           const profitFromThisRound = win - Number(currentBet);
           setBalanceStats((prev) => {
             const previousProfit = prev.length > 0 ? prev[prev.length - 1] : 0;
