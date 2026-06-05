@@ -4,7 +4,7 @@ import { useBalance } from "@/context/balanceContext";
 import { kenoCoefficients } from "@/lib/keno/getKenoCoefficient";
 import { playSound } from "@/lib/playSound";
 import { selectFromMany } from "@/lib/shared/selectFromMany";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function useKeno() {
   const { balance, setBalance, balanceStats, setBalanceStats } = useBalance();
@@ -19,6 +19,12 @@ export function useKeno() {
   const [missedCells, setMissedCells] = useState<number[]>([]);
   const [isWinBannerOpen, setIsWinBannerOpen] = useState(false);
   const [currentMultiplier, setCurrentMultiplier] = useState(0);
+  const [isAuto, setIsAuto] = useState(false);
+
+  const isAutoRef = useRef(isAuto);
+  useEffect(() => {
+    isAutoRef.current = isAuto;
+  }, [isAuto]);
 
   const handleCellClick = (i: number) => {
     if (!gameRunning) {
@@ -60,7 +66,27 @@ export function useKeno() {
     setBet(num.toFixed(2));
   }
 
-  const startGame = () => {
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  async function startAuto() {
+    if (
+      userCells.length >= 1 &&
+      (balance >= Number(bet) || balance.toFixed(2) === bet)
+    )
+      while (balance >= Number(bet) && isAutoRef.current) {
+        setGameRunning(true);
+        startGame(50, true);
+        await delay(1000);
+      }
+  }
+
+  function stopAuto() {
+    setIsAuto(false);
+    setGameRunning(false);
+  }
+
+  const startGame = (time: number = 150, auto = false) => {
     if (
       userCells.length >= 1 &&
       (balance >= Number(bet) || balance.toFixed(2) === bet)
@@ -97,17 +123,19 @@ export function useKeno() {
           } else {
             playSound("bong.ogg");
           }
-        }, 150 * i);
+        }, time * i);
       }
       setTimeout(() => {
-        setGameRunning(false);
+        if (!auto) {
+          setGameRunning(false);
+        }
         const finalHits = systemChosen.filter((cell) =>
           userCells.includes(cell),
         ).length;
         const multipliers =
-          kenoCoefficients.classic[
-            userCells.length as keyof typeof kenoCoefficients.classic
-          ] || [];
+          ((kenoCoefficients as any)[risk]?.[userCells.length] as number[]) ||
+          [];
+
         const finalMultiplier = multipliers[finalHits] || 0;
 
         if (finalMultiplier > 0) {
@@ -126,7 +154,7 @@ export function useKeno() {
             return [...prev, currentProfit - currentBet];
           });
         }
-      }, 1500);
+      }, time * 10);
     }
   };
 
@@ -158,5 +186,9 @@ export function useKeno() {
     clearTable,
     balanceStats,
     balance,
+    isAuto,
+    setIsAuto,
+    startAuto,
+    stopAuto,
   };
 }

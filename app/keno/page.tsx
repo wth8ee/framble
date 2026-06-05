@@ -12,8 +12,6 @@ export default function KenoPage() {
   const {
     cells,
     gameRunning,
-    risk,
-    setRisk,
     bet,
     setBet,
     lastBet,
@@ -30,6 +28,12 @@ export default function KenoPage() {
     clearTable,
     balanceStats,
     balance,
+    risk,
+    setRisk,
+    isAuto,
+    setIsAuto,
+    startAuto,
+    stopAuto,
   } = useKeno();
 
   const [isStatsOpen, setIsStatsOpen] = useState(false);
@@ -41,6 +45,11 @@ export default function KenoPage() {
 
         <div className="w-full max-w-5xl bg-slate-900/40 border border-slate-900 rounded-xl p-4 md:p-6 backdrop-blur-md grid grid-cols-1 md:grid-cols-12 gap-6 z-10 my-auto">
           <KenoMenu
+            stopAuto={stopAuto}
+            isAuto={isAuto}
+            setIsAuto={setIsAuto}
+            risk={risk}
+            setRisk={setRisk}
             bet={bet}
             setBet={setBet}
             handleBetBlur={handleBetBlur}
@@ -50,8 +59,10 @@ export default function KenoPage() {
             balance={balance}
             userCells={userCells}
             clearTable={clearTable}
+            startAuto={startAuto}
           />
           <KenoField
+            risk={risk}
             gameRunning={gameRunning}
             winCells={winCells}
             userCells={userCells}

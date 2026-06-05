@@ -14,6 +14,7 @@ interface KenoFieldProps {
   isWinBannerOpen: boolean;
   currentMultiplier: number;
   setIsWinBannerOpen: (state: boolean) => void;
+  risk: string;
 }
 
 export function KenoField({
@@ -25,12 +26,11 @@ export function KenoField({
   isWinBannerOpen,
   currentMultiplier,
   setIsWinBannerOpen,
+  risk,
 }: KenoFieldProps) {
   const multipliersDemo =
     userCells.length > 0
-      ? kenoCoefficients.classic[
-          userCells.length as keyof typeof kenoCoefficients.classic
-        ]
+      ? ((kenoCoefficients as any)[risk]?.[userCells.length] as number[]) || []
       : [];
 
   return (

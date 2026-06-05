@@ -1,9 +1,10 @@
 "use client";
 
-import { Coins, Play } from "lucide-react";
+import { Coins } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -22,6 +23,12 @@ interface KenoMenuProps {
   startGame: () => void;
   userCells: number[];
   clearTable: () => void;
+  risk: string;
+  setRisk: (risk: string) => void;
+  isAuto: boolean;
+  setIsAuto: (val: boolean) => void;
+  startAuto: () => void;
+  stopAuto: () => {};
 }
 
 export function KenoMenu({
@@ -34,10 +41,16 @@ export function KenoMenu({
   balance,
   userCells,
   clearTable,
+  risk,
+  setRisk,
+  isAuto,
+  setIsAuto,
+  startAuto,
+  stopAuto,
 }: KenoMenuProps) {
   return (
     <div className="md:col-span-4 flex flex-col justify-start bg-slate-950/60 border border-slate-900 rounded-lg p-4 gap-4">
-      <div className="gap-4 flex flex-col">
+      <div className="gap-4 flex flex-col w-full">
         <div className="flex flex-col gap-2">
           <div className="flex justify-between items-center text-xs font-semibold text-slate-400">
             <Label htmlFor="bet-amount">Bet Amount</Label>
@@ -53,7 +66,7 @@ export function KenoMenu({
               id="bet-amount"
               type="number"
               value={bet}
-              className="bg-slate-900 border-slate-800 text-slate-100 font-bold pl-3 pr-20 h-10 focus-visible:ring-emerald-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              className="bg-slate-900 border-slate-800 text-slate-100 font-bold pl-3 pr-28 h-10 focus-visible:ring-emerald-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             />
             <div className="absolute right-1 flex gap-1">
               <Button
@@ -122,7 +135,11 @@ export function KenoMenu({
           >
             Risk
           </Label>
-          <Select disabled={gameRunning} defaultValue="classic">
+          <Select
+            disabled={gameRunning}
+            value={risk}
+            onValueChange={(value) => setRisk(value)}
+          >
             <SelectTrigger
               id="risk-level"
               className="bg-slate-900 border-slate-800 text-slate-100 font-bold h-10 focus:ring-emerald-500"
@@ -156,26 +173,52 @@ export function KenoMenu({
           </Select>
         </div>
 
+        <div className="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/40 px-3 py-2.5">
+          <Label
+            htmlFor="auto-bet-switch"
+            className="text-xs font-semibold text-slate-400 cursor-pointer"
+          >
+            Auto Bet Mode
+          </Label>
+          <Switch
+            checked={isAuto}
+            onCheckedChange={(checked) => setIsAuto(checked)}
+            id="auto-bet-switch"
+            disabled={gameRunning}
+            className="data-[state=checked]:bg-emerald-500 data-[state=unchecked]:bg-slate-800"
+          />
+        </div>
+
         <Button
           disabled={gameRunning}
           onClick={clearTable}
-          className="w-full h-12 sm:h-12 font-bold text-md bg-slate-900 border border-slate-800 text-slate-400 hover:bg-slate-800 transition-all flex items-center justify-center gap-2 uppercase tracking-wide"
+          className="w-full h-10 font-bold text-xs bg-slate-900 border border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-slate-200 transition-all uppercase tracking-wide"
         >
           Clear Table
         </Button>
-      </div>
 
-      <div className="pt-4 md:pt-0">
         <Button
-          disabled={gameRunning || userCells.length === 0}
+          disabled={gameRunning && !isAuto}
           onClick={() => {
             if (!gameRunning && userCells.length > 0) {
-              startGame();
+              if (isAuto) {
+                startAuto();
+              } else {
+                startGame();
+              }
+            } else {
+              if (isAuto && gameRunning) {
+                stopAuto();
+              }
             }
           }}
-          className="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 text-md font-black h-12 uppercase tracking-wide shadow-lg shadow-emerald-500/10"
+          className="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 text-md font-black h-12 uppercase tracking-wide shadow-lg shadow-emerald-500/10 flex items-center justify-center gap-2"
         >
-          {userCells.length > 0 ? "Bet" : "Pick A Tile"}
+          {isAuto && gameRunning
+            ? "Stop"
+            : userCells.length > 0
+              ? "Bet"
+              : "Pick A Tile"}
         </Button>
       </div>
     </div>
