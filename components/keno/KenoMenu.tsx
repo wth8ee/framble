@@ -28,7 +28,7 @@ interface KenoMenuProps {
   isAuto: boolean;
   setIsAuto: (val: boolean) => void;
   startAuto: () => void;
-  stopAuto: () => {};
+  stopAuto: () => void;
 }
 
 export function KenoMenu({
