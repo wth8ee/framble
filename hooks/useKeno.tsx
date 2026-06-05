@@ -97,9 +97,7 @@ export function useKeno() {
       setIsWinBannerOpen(false);
       setLastBet(bet);
       setBalance(balanceAfterBet);
-      if (balanceStats.length === 0) {
-        setBalanceStats([0]);
-      }
+      setBalanceStats((prev) => (prev.length === 0 ? [0] : prev));
       const systemChosenIndexes = selectFromMany(10, 40);
       const systemChosen = systemChosenIndexes.map((index) => index + 1);
       for (let i = 1; i < 11; i++) {
