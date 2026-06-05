@@ -36,8 +36,6 @@ export default function KenoPage() {
     stopAuto,
   } = useKeno();
 
-  const [isStatsOpen, setIsStatsOpen] = useState(false);
-
   return (
     <ScrollArea className="h-[calc(100vh-4rem)] w-full bg-slate-950 text-slate-50 selection:bg-emerald-500 selection:text-slate-950">
       <div className="min-h-[calc(100vh-4rem)] py-6 pb-20 px-4 sm:px-6 lg:px-8 flex items-start md:items-center justify-center relative overflow-hidden w-full">
