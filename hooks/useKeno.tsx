@@ -22,9 +22,13 @@ export function useKeno() {
   const [isAuto, setIsAuto] = useState(false);
 
   const isAutoRef = useRef(isAuto);
+  const balanceRef = useRef(balance);
   useEffect(() => {
     isAutoRef.current = isAuto;
   }, [isAuto]);
+  useEffect(() => {
+    balanceRef.current = balance;
+  }, [balance]);
 
   const handleCellClick = (i: number) => {
     if (!gameRunning) {
@@ -70,15 +74,16 @@ export function useKeno() {
     new Promise((resolve) => setTimeout(resolve, ms));
 
   async function startAuto() {
-    if (
+    while (
       userCells.length >= 1 &&
-      (balance >= Number(bet) || balance.toFixed(2) === bet)
-    )
-      while (balance >= Number(bet) && isAutoRef.current) {
-        setGameRunning(true);
-        startGame(50, true);
-        await delay(1000);
-      }
+      (balanceRef.current >= Number(bet) ||
+        balanceRef.current.toFixed(2) === bet) &&
+      isAutoRef.current
+    ) {
+      setGameRunning(true);
+      startGame(50, true);
+      await delay(1000);
+    }
   }
 
   function stopAuto() {
@@ -91,11 +96,11 @@ export function useKeno() {
       userCells.length >= 1 &&
       (balance >= Number(bet) || balance.toFixed(2) === bet)
     ) {
-      const balanceAfterBet = balance - Number(bet);
       const currentBet = Number(bet);
       setGameRunning(true);
       setIsWinBannerOpen(false);
       setLastBet(bet);
+      balanceRef.current -= Number(bet);
       setBalance((prev: number) => prev - Number(bet));
       setBalanceStats((prev) => (prev.length === 0 ? [0] : prev));
       const systemChosenIndexes = selectFromMany(10, 40);
@@ -140,6 +145,7 @@ export function useKeno() {
           setCurrentMultiplier(finalMultiplier);
           setIsWinBannerOpen(true);
           const win = Number(currentBet) * finalMultiplier;
+          balanceRef.current = balanceRef.current + win;
           setBalance((prev) => prev + win);
           const profitFromThisRound = win - Number(currentBet);
           setBalanceStats((prev) => {
@@ -151,6 +157,10 @@ export function useKeno() {
             const currentProfit = prev.length > 0 ? prev[prev.length - 1] : 0;
             return [...prev, currentProfit - currentBet];
           });
+        }
+
+        if (balanceRef.current < Number(bet)) {
+          stopAuto();
         }
       }, time * 10);
     }
