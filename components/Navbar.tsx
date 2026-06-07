@@ -20,6 +20,7 @@ export function Navbar() {
   function handleBalanceReset() {
     if (balance < 1000) {
       setBalance(1000);
+      setBalanceStats([]);
     }
   }
 
