@@ -10,52 +10,39 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { countDiamonds } from "@/lib/mines/countDiamonds";
+import { RiskLevel } from "@/lib/plinko/multipliers";
 import { Coins } from "lucide-react";
 
-interface MinesMenuProps {
-  gameRunning: boolean;
-  startGame: () => void;
-  setBombsNumber: (bombsNumber: number) => void;
-  bombsNumber: number;
-  coefficient: number;
-  nextCoefficient: number;
-  cells: any[];
+interface PlinkoMenuProps {
   bet: string;
   handleBetChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleBetBlur: () => void;
   setBet: (bet: string) => void;
   balance: number;
-  cashOut: () => void;
-  lastBet: string | null;
+  risk: RiskLevel;
+  setRisk: (risk: RiskLevel) => void;
+  rows: number;
+  setRows: (rows: number) => void;
+  dropBall: () => void;
+  balls: any[];
 }
 
-export function MinesMenu({
-  gameRunning,
-  startGame,
-  setBombsNumber,
-  bombsNumber,
-  coefficient,
-  nextCoefficient,
-  cells,
+export function PlinkoMenu({
   bet,
   handleBetChange,
   handleBetBlur,
   setBet,
   balance,
-  cashOut,
-  lastBet,
-}: MinesMenuProps) {
-  const diamonds = countDiamonds(cells);
-
-  const buttonState = !gameRunning
-    ? "Bet"
-    : diamonds
-      ? "Cash Out"
-      : "Pick a Tile";
-
+  risk,
+  setRisk,
+  rows,
+  setRows,
+  dropBall,
+  balls,
+}: PlinkoMenuProps) {
+  const isPlaying = balls && balls.length > 0;
   return (
-    <div className="md:col-span-4 order-2 md:order-1 flex flex-col justify-between bg-slate-950/60 border border-slate-900 rounded-lg p-4 space-y-6">
+    <div className="md:col-span-4 order-2 md:order-1 flex flex-col justify-start bg-slate-950/60 border border-slate-900 rounded-lg p-4 space-y-6 h-fit">
       <div className="space-y-4">
         <div className="space-y-2">
           <div className="flex justify-between items-center text-xs font-semibold text-slate-400">
@@ -66,7 +53,6 @@ export function MinesMenu({
           </div>
           <div className="relative flex items-center">
             <Input
-              disabled={gameRunning}
               id="bet-amount"
               type="number"
               value={bet}
@@ -76,7 +62,6 @@ export function MinesMenu({
             />
             <div className="absolute right-1 flex gap-1">
               <Button
-                disabled={gameRunning}
                 onClick={() => {
                   if (parseFloat(bet) / 2 >= 1) {
                     setBet((parseFloat(bet) / 2).toFixed(2));
@@ -97,7 +82,7 @@ export function MinesMenu({
                       setBet((Number(bet) * 2).toFixed(2));
                     } else {
                       if (balance >= 1) {
-                        setBet(balance.toFixed(2));
+                        setBet((Math.floor(balance * 100) / 100).toFixed(2));
                       } else {
                         setBet("1.00");
                       }
@@ -106,7 +91,6 @@ export function MinesMenu({
                     setBet("100000.00");
                   }
                 }}
-                disabled={gameRunning}
                 variant="ghost"
                 size="sm"
                 className="h-8 px-2 text-xs text-slate-400 hover:bg-slate-800 hover:text-slate-200"
@@ -118,12 +102,11 @@ export function MinesMenu({
                   if (balance > 100000) {
                     setBet("100000.00");
                   } else if (balance >= 1) {
-                    setBet(balance.toFixed(2));
+                    setBet((Math.floor(balance * 100) / 100).toFixed(2));
                   } else {
                     setBet("1.00");
                   }
                 }}
-                disabled={gameRunning}
                 variant="ghost"
                 size="sm"
                 className="h-8 px-1.5 text-[10px] font-extrabold text-emerald-400 hover:bg-slate-800 hover:text-emerald-300"
@@ -135,74 +118,46 @@ export function MinesMenu({
         </div>
 
         <div className="space-y-2">
-          <Label
-            htmlFor="mines-count"
-            className="text-xs font-semibold text-slate-400"
-          >
-            Mines
+          <Label htmlFor="risk-level" className="text-xs font-semibold text-slate-400">
+            Risk
           </Label>
-          <Select
-            disabled={gameRunning}
-            onValueChange={(value) => setBombsNumber(Number(value))}
-            defaultValue={String(bombsNumber)}
-          >
-            <SelectTrigger
-              id="mines-count"
-              className="bg-slate-900 border-slate-800 text-slate-100 font-bold h-10 focus:ring-emerald-500"
-            >
-              <SelectValue placeholder="Select mines" />
+          <Select value={risk} onValueChange={(v) => setRisk(v as RiskLevel)} disabled={isPlaying}>
+            <SelectTrigger id="risk-level" className="bg-slate-900 border-slate-800 text-slate-100 font-bold h-10 focus:ring-emerald-500 disabled:opacity-50">
+              <SelectValue placeholder="Select risk" />
             </SelectTrigger>
-            <SelectContent
-              position="popper"
-              sideOffset={4}
-              className="bg-slate-900 border-slate-800 text-slate-100 max-h-50 overflow-y-auto"
-            >
-              {Array.from({ length: 24 }).map((_, i) => (
-                <SelectItem
-                  key={i + 1}
-                  value={(i + 1).toString()}
-                  className="focus:bg-emerald-500 focus:text-slate-950 font-semibold cursor-pointer"
-                >
-                  {i + 1}
+            <SelectContent position="popper" sideOffset={4} className="bg-slate-900 border-slate-800 text-slate-100">
+              <SelectItem value="low" className="focus:bg-emerald-500 focus:text-slate-950 font-semibold cursor-pointer">Low</SelectItem>
+              <SelectItem value="medium" className="focus:bg-emerald-500 focus:text-slate-950 font-semibold cursor-pointer">Medium</SelectItem>
+              <SelectItem value="high" className="focus:bg-emerald-500 focus:text-slate-950 font-semibold cursor-pointer">High</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="rows-count" className="text-xs font-semibold text-slate-400">
+            Rows
+          </Label>
+          <Select value={String(rows)} onValueChange={(v) => setRows(Number(v))} disabled={isPlaying}>
+            <SelectTrigger id="rows-count" className="bg-slate-900 border-slate-800 text-slate-100 font-bold h-10 focus:ring-emerald-500 disabled:opacity-50">
+              <SelectValue placeholder="Select rows" />
+            </SelectTrigger>
+            <SelectContent position="popper" sideOffset={4} className="bg-slate-900 border-slate-800 text-slate-100 max-h-50 overflow-y-auto">
+              {Array.from({ length: 9 }).map((_, i) => (
+                <SelectItem key={i + 8} value={String(i + 8)} className="focus:bg-emerald-500 focus:text-slate-950 font-semibold cursor-pointer">
+                  {i + 8}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
-
-        <div className="p-3 bg-slate-900/80 border border-slate-800 rounded-lg space-y-2 text-xs text-slate-400">
-          <div className="flex justify-between">
-            <span>Current Profit:</span>
-            <span className="text-emerald-400 font-bold">
-              +${(Number(lastBet) * (coefficient - 1)).toFixed(2)} (
-              {coefficient.toFixed(2)}
-              x)
-            </span>
-          </div>
-          <div className="flex justify-between">
-            <span>Next Tile:</span>
-            <span className="text-slate-200 font-semibold">
-              {nextCoefficient.toFixed(2)}x
-            </span>
-          </div>
-        </div>
       </div>
 
-      <div className="pt-4 md:pt-0">
+      <div className="pt-2 md:pt-4">
         <Button
-          disabled={buttonState === "Pick a Tile"}
-          onClick={() => {
-            if (!gameRunning) {
-              startGame();
-            } else {
-              if (buttonState === "Cash Out") {
-                cashOut();
-              }
-            }
-          }}
+          onClick={dropBall}
           className="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 text-md font-black h-12 uppercase tracking-wide shadow-lg shadow-emerald-500/10"
         >
-          {buttonState}
+          Play
         </Button>
       </div>
     </div>

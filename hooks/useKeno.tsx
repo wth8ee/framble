@@ -105,6 +105,7 @@ export function useKeno() {
       setBalanceStats((prev) => (prev.length === 0 ? [0] : prev));
       const systemChosenIndexes = selectFromMany(10, 40);
       const systemChosen = systemChosenIndexes.map((index) => index + 1);
+      // const systemChosen = [...userCells];
       for (let i = 1; i < 11; i++) {
         setTimeout(() => {
           const currentChosen = systemChosen.slice(0, i);

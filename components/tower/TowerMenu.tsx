@@ -10,52 +10,55 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { countDiamonds } from "@/lib/mines/countDiamonds";
 import { Coins } from "lucide-react";
 
-interface MinesMenuProps {
+interface TowerMenuProps {
   gameRunning: boolean;
+  gameEnded: boolean;
   startGame: () => void;
-  setBombsNumber: (bombsNumber: number) => void;
-  bombsNumber: number;
+  minesNumber: number;
+  setMinesNumber: (minesNumber: number) => void;
+  gridCols: number;
+  setGridCols: (cols: number) => void;
   coefficient: number;
   nextCoefficient: number;
-  cells: any[];
   bet: string;
+  setBet: (bet: string) => void;
   handleBetChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleBetBlur: () => void;
-  setBet: (bet: string) => void;
   balance: number;
   cashOut: () => void;
   lastBet: string | null;
+  activeRow: number;
 }
 
-export function MinesMenu({
+export function TowerMenu({
   gameRunning,
+  gameEnded,
   startGame,
-  setBombsNumber,
-  bombsNumber,
+  minesNumber,
+  setMinesNumber,
+  gridCols,
+  setGridCols,
   coefficient,
   nextCoefficient,
-  cells,
   bet,
+  setBet,
   handleBetChange,
   handleBetBlur,
-  setBet,
   balance,
   cashOut,
   lastBet,
-}: MinesMenuProps) {
-  const diamonds = countDiamonds(cells);
-
+  activeRow,
+}: TowerMenuProps) {
   const buttonState = !gameRunning
     ? "Bet"
-    : diamonds
+    : activeRow > 0
       ? "Cash Out"
       : "Pick a Tile";
 
   return (
-    <div className="md:col-span-4 order-2 md:order-1 flex flex-col justify-between bg-slate-950/60 border border-slate-900 rounded-lg p-4 space-y-6">
+    <div className="md:col-span-4 order-2 md:order-1 flex flex-col justify-between bg-slate-950/60 border border-slate-900 rounded-lg p-4 space-y-6 h-full">
       <div className="space-y-4">
         <div className="space-y-2">
           <div className="flex justify-between items-center text-xs font-semibold text-slate-400">
@@ -134,53 +137,91 @@ export function MinesMenu({
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label
-            htmlFor="mines-count"
-            className="text-xs font-semibold text-slate-400"
-          >
-            Mines
-          </Label>
-          <Select
-            disabled={gameRunning}
-            onValueChange={(value) => setBombsNumber(Number(value))}
-            defaultValue={String(bombsNumber)}
-          >
-            <SelectTrigger
-              id="mines-count"
-              className="bg-slate-900 border-slate-800 text-slate-100 font-bold h-10 focus:ring-emerald-500"
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label
+              htmlFor="grid-cols"
+              className="text-xs font-semibold text-slate-400"
             >
-              <SelectValue placeholder="Select mines" />
-            </SelectTrigger>
-            <SelectContent
-              position="popper"
-              sideOffset={4}
-              className="bg-slate-900 border-slate-800 text-slate-100 max-h-50 overflow-y-auto"
+              Width
+            </Label>
+            <Select
+              disabled={gameRunning}
+              onValueChange={(value) => setGridCols(Number(value))}
+              value={String(gridCols)}
             >
-              {Array.from({ length: 24 }).map((_, i) => (
-                <SelectItem
-                  key={i + 1}
-                  value={(i + 1).toString()}
-                  className="focus:bg-emerald-500 focus:text-slate-950 font-semibold cursor-pointer"
-                >
-                  {i + 1}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+              <SelectTrigger
+                id="grid-cols"
+                className="bg-slate-900 border-slate-800 text-slate-100 font-bold h-10 focus:ring-emerald-500"
+              >
+                <SelectValue placeholder="Width" />
+              </SelectTrigger>
+              <SelectContent
+                position="popper"
+                sideOffset={4}
+                className="bg-slate-900 border-slate-800 text-slate-100 max-h-50 overflow-y-auto"
+              >
+                {[2, 3, 4, 5].map((i) => (
+                  <SelectItem
+                    key={i}
+                    value={i.toString()}
+                    className="focus:bg-emerald-500 focus:text-slate-950 font-semibold cursor-pointer"
+                  >
+                    {i}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label
+              htmlFor="mines-count"
+              className="text-xs font-semibold text-slate-400"
+            >
+              Mines
+            </Label>
+            <Select
+              disabled={gameRunning}
+              onValueChange={(value) => setMinesNumber(Number(value))}
+              value={String(minesNumber)}
+            >
+              <SelectTrigger
+                id="mines-count"
+                className="bg-slate-900 border-slate-800 text-slate-100 font-bold h-10 focus:ring-emerald-500"
+              >
+                <SelectValue placeholder="Select risk" />
+              </SelectTrigger>
+              <SelectContent
+                position="popper"
+                sideOffset={4}
+                className="bg-slate-900 border-slate-800 text-slate-100 max-h-50 overflow-y-auto"
+              >
+                {Array.from({ length: gridCols - 1 }, (_, i) => i + 1).map((i) => (
+                  <SelectItem
+                    key={i}
+                    value={i.toString()}
+                    className="focus:bg-emerald-500 focus:text-slate-950 font-semibold cursor-pointer"
+                  >
+                    {i}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         <div className="p-3 bg-slate-900/80 border border-slate-800 rounded-lg space-y-2 text-xs text-slate-400">
           <div className="flex justify-between">
             <span>Current Profit:</span>
             <span className="text-emerald-400 font-bold">
-              +${(Number(lastBet) * (coefficient - 1)).toFixed(2)} (
-              {coefficient.toFixed(2)}
-              x)
+              {activeRow > 0 && lastBet
+                ? `+$${(Number(lastBet) * (coefficient - 1)).toFixed(2)} (${coefficient.toFixed(2)}x)`
+                : "$0.00 (1.00x)"}
             </span>
           </div>
           <div className="flex justify-between">
-            <span>Next Tile:</span>
+            <span>Next Row:</span>
             <span className="text-slate-200 font-semibold">
               {nextCoefficient.toFixed(2)}x
             </span>

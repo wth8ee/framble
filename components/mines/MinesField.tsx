@@ -29,7 +29,7 @@ export function MinesField({
   const isWin = gameEnded && !cells.includes("bomb");
 
   return (
-    <div className="md:col-span-8 flex flex-col items-center justify-center p-2 sm:p-6 bg-slate-950/20 border border-slate-900/60 rounded-lg min-h-[350px] sm:min-h-[450px]">
+    <div className="md:col-span-8 order-1 md:order-2 flex flex-col items-center justify-center p-2 sm:p-6 bg-slate-950/20 border border-slate-900/60 rounded-lg min-h-[350px] sm:min-h-[450px]">
       <div className="relative w-full max-w-100 aspect-square flex items-center justify-center">
         {isWin && (
           <WinBanner

@@ -15,10 +15,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { GameCards } from "@/components/GameCards";
 
 export default function HomePage() {
   return (
-    <ScrollArea className="h-[calc(100vh-4rem)] **:data-radix-scroll-area-scrollbar:z-50 bg-slate-950 text-slate-50 flex flex-col justify-between selection:bg-emerald-500 selection:text-slate-950">
+    <ScrollArea className="h-[calc(100dvh-4rem)] **:data-radix-scroll-area-scrollbar:z-50 bg-slate-950 text-slate-50 flex flex-col justify-between selection:bg-emerald-500 selection:text-slate-950">
       <main className="w-full overflow-x-hidden flex flex-col flex-1">
         <section className="relative py-12 md:py-20 px-4 sm:px-6 lg:px-8 text-center max-w-5xl mx-auto flex flex-col items-center justify-center flex-1 z-10 w-full">
           <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[320px] sm:max-w-200 aspect-square bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.12)_0%,rgba(16,185,129,0)_70%)] rounded-full blur-[40px] sm:blur-[60px] pointer-events-none -z-10" />
@@ -103,11 +104,15 @@ export default function HomePage() {
           </div>
         </section>
 
+        <section className="py-10 px-0 sm:px-6 max-w-7xl mx-auto w-full z-10 flex flex-col items-center">
+          <GameCards />
+        </section>
+
         <section
           id="how-to-play"
-          className="py-16 md:py-20 px-4 sm:px-6 max-w-7xl mx-auto w-full z-10"
+          className="py-12 md:py-16 px-4 sm:px-6 max-w-7xl mx-auto w-full z-10"
         >
-          <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+          <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
             <h2 className="text-xl sm:text-3xl font-bold tracking-tight mb-3 uppercase">
               Why Play With Us?
             </h2>

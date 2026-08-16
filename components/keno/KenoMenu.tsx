@@ -49,7 +49,7 @@ export function KenoMenu({
   stopAuto,
 }: KenoMenuProps) {
   return (
-    <div className="md:col-span-4 flex flex-col justify-start bg-slate-950/60 border border-slate-900 rounded-lg p-4 gap-4">
+    <div className="md:col-span-4 order-2 md:order-1 flex flex-col justify-start bg-slate-950/60 border border-slate-900 rounded-lg p-4 gap-4">
       <div className="gap-4 flex flex-col w-full">
         <div className="flex flex-col gap-2">
           <div className="flex justify-between items-center text-xs font-semibold text-slate-400">

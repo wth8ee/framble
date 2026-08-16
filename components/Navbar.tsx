@@ -66,6 +66,48 @@ export function Navbar() {
             >
               Keno
             </Link>
+
+            <Link
+              href="/plinko"
+              className={`${pathname === "/plinko" ? "text-slate-50 font-bold" : "text-slate-400"} hover:text-emerald-400 transition-colors hidden sm:inline`}
+            >
+              Plinko
+            </Link>
+
+            <Link
+              href="/tower"
+              className={`${pathname === "/tower" ? "text-slate-50 font-bold" : "text-slate-400"} hover:text-emerald-400 transition-colors hidden sm:inline`}
+            >
+              Tower
+            </Link>
+
+            <Link
+              href="/wheel"
+              className={`${pathname === "/wheel" ? "text-slate-50 font-bold" : "text-slate-400"} hover:text-emerald-400 transition-colors hidden xl:inline`}
+            >
+              Wheel
+            </Link>
+
+            <Link
+              href="/coinflip"
+              className={`${pathname === "/coinflip" ? "text-slate-50 font-bold" : "text-slate-400"} hover:text-emerald-400 transition-colors hidden xl:inline`}
+            >
+              Coin Flip
+            </Link>
+
+            <Link
+              href="/dice"
+              className={`${pathname === "/dice" ? "text-slate-50 font-bold" : "text-slate-400"} hover:text-emerald-400 transition-colors hidden xl:inline`}
+            >
+              Dice
+            </Link>
+
+            <Link
+              href="/crash"
+              className={`${pathname === "/crash" ? "text-slate-50 font-bold" : "text-slate-400"} hover:text-emerald-400 transition-colors hidden xl:inline`}
+            >
+              Crash
+            </Link>
           </nav>
         </div>
 

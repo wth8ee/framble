@@ -32,7 +32,7 @@ export function WinBanner({
         <div className="absolute -top-12 -left-12 w-24 h-24 bg-emerald-400/20 rounded-full blur-2xl pointer-events-none" />
 
         <div className="text-4xl font-black tracking-tighter bg-linear-to-r from-emerald-400 via-green-400 to-green-500 bg-clip-text text-transparent drop-shadow-[0_4px_12px_rgba(16,185,129,0.35)]">
-          {multiplier}x
+          {Number(multiplier).toFixed(2)}x
         </div>
 
         <div className="w-16 h-0.5 bg-emerald-400/80 rounded-full my-3" />

@@ -1,35 +1,33 @@
 "use client";
 
-import { BarChart2 } from "lucide-react";
-import { useMines } from "@/hooks/useMines";
-import { MinesMenu } from "@/components/mines/MinesMenu";
-import { MinesField } from "@/components/mines/MinesField";
-import { useBalance } from "@/context/balanceContext";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { LiveStatsWindow } from "@/components/LiveStatsWindow";
+import { useTower } from "@/hooks/useTower";
+import { TowerMenu } from "@/components/tower/TowerMenu";
+import { TowerField } from "@/components/tower/TowerField";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-export default function MinesPage() {
+export default function TowerPage() {
   const {
     cells,
     bombs,
     gameRunning,
+    gameEnded,
+    activeRow,
     startGame,
     handleCellClick,
-    setBombsNumber,
-    bombsNumber,
+    minesNumber,
+    setMinesNumber,
+    gridCols,
+    setGridCols,
     coefficient,
     nextCoefficient,
     bet,
+    setBet,
     handleBetChange,
     handleBetBlur,
-    setBet,
     cashOut,
     lastBet,
-    balanceStats,
     balance,
-  } = useMines();
+  } = useTower();
 
   return (
     <ScrollArea className="h-[calc(100dvh-4rem)] w-full bg-slate-950 text-slate-50 selection:bg-emerald-500 selection:text-slate-950">
@@ -37,31 +35,37 @@ export default function MinesPage() {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="w-full max-w-5xl bg-slate-900/40 border border-slate-900 rounded-xl p-4 md:p-6 backdrop-blur-md grid grid-cols-1 md:grid-cols-12 gap-6 z-10 my-auto">
-          <MinesMenu
+          <TowerMenu
             gameRunning={gameRunning}
+            gameEnded={gameEnded}
             startGame={startGame}
-            setBombsNumber={setBombsNumber}
-            bombsNumber={bombsNumber}
+            minesNumber={minesNumber}
+            setMinesNumber={setMinesNumber}
+            gridCols={gridCols}
+            setGridCols={setGridCols}
             coefficient={coefficient}
             nextCoefficient={nextCoefficient}
-            cells={cells}
             bet={bet}
+            setBet={setBet}
             handleBetChange={handleBetChange}
             handleBetBlur={handleBetBlur}
-            setBet={setBet}
             balance={balance}
             cashOut={cashOut}
             lastBet={lastBet}
+            activeRow={activeRow}
           />
 
-          <MinesField
-            gameRunning={gameRunning}
+          <TowerField
             cells={cells}
             bombs={bombs}
             handleCellClick={handleCellClick}
-            bet={bet}
+            gameRunning={gameRunning}
+            gameEnded={gameEnded}
+            activeRow={activeRow}
             coefficient={coefficient}
+            bet={bet}
             lastBet={lastBet}
+            gridCols={gridCols}
           />
         </div>
       </div>

@@ -16,7 +16,7 @@ export function KenoCells({
   missedCells,
 }: KenoCellsProps) {
   return (
-    <div className="grid grid-cols-8 gap-1.5 sm:gap-2 w-full">
+    <div className="grid grid-cols-8 gap-1.5 sm:gap-2 w-full select-none">
       {Array.from({ length: 40 }).map((cell, i) => {
         const num = i + 1;
 
@@ -25,7 +25,7 @@ export function KenoCells({
             <button
               onClick={() => handleCellClick(num)}
               key={num}
-              className="aspect-square relative rounded-lg font-black text-sm sm:text-base flex items-center justify-center transition-all bg-gradient-to-br from-emerald-500 to-teal-600 text-slate-950 shadow-lg shadow-emerald-500/20 scale-[0.96] border-4 border-purple-500 overflow-hidden"
+              className="aspect-square relative rounded-lg font-black text-sm sm:text-base flex items-center justify-center transition-all bg-linear-to-br from-emerald-500 to-teal-600 text-slate-950 shadow-lg shadow-emerald-500/20 scale-[0.96] border-4 border-purple-500 overflow-hidden"
             >
               <Diamond className="absolute w-6 h-6 text-slate-950/10 fill-slate-950/5 pointer-events-none" />
               <span className="relative z-10">{num}</span>

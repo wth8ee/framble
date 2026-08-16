@@ -34,7 +34,7 @@ export function KenoField({
       : [];
 
   return (
-    <div className="md:col-span-8 flex flex-col items-center justify-center p-2 sm:p-6 bg-slate-950/20 border border-slate-900/60 rounded-lg min-h-[350px] sm:min-h-[450px]">
+    <div className="md:col-span-8 order-1 md:order-2 flex flex-col items-center justify-center p-2 sm:p-6 bg-slate-950/20 border border-slate-900/60 rounded-lg min-h-[350px] sm:min-h-[450px]">
       <div className="w-full space-y-5">
         <div className="relative w-full flex items-center justify-center">
           {isWinBannerOpen && currentMultiplier > 0 && (
