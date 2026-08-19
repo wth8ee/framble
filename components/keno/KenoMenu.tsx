@@ -64,7 +64,7 @@ export function KenoMenu({
               onBlur={handleBetBlur}
               disabled={gameRunning}
               id="bet-amount"
-              type="number"
+              type="text" inputMode="decimal"
               value={bet}
               className="bg-slate-900 border-slate-800 text-slate-100 font-bold pl-3 pr-28 h-10 focus-visible:ring-emerald-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             />
@@ -224,3 +224,4 @@ export function KenoMenu({
     </div>
   );
 }
+

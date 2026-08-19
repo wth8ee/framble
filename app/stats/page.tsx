@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import {
   Crown,
@@ -18,77 +16,28 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { prisma } from "@/lib/prisma";
 
-const mockLeaderboard = [
-  { name: "AlphaPhantom", value: 14500.5, detail: "online", isMoney: true },
-  { name: "ShadowRunner", value: 8200.0, detail: "offline", isMoney: true },
-  { name: "QuantumVortex", value: 4300.15, detail: "online", isMoney: true },
-  { name: "CyberGrizzly", value: 250.2, detail: "online", isMoney: true },
-];
+export const dynamic = 'force-dynamic';
 
-const mockBigWins = [
-  {
-    name: "AlphaPhantom",
-    game: "Mines",
-    value: 6250.0,
-    multiplier: 12.5,
-    isMoney: true,
-  },
-  {
-    name: "ShadowRunner",
-    game: "Keno",
-    value: 3600.0,
-    multiplier: 18.0,
-    isMoney: true,
-  },
-  {
-    name: "NeonFalcon",
-    game: "Mines",
-    value: 2500.0,
-    multiplier: 25.0,
-    isMoney: true,
-  },
-  {
-    name: "CyberGrizzly",
-    game: "Keno",
-    value: 1200.0,
-    multiplier: 6.0,
-    isMoney: true,
-  },
-];
+export default async function StatsPage() {
+  const topUsers = await prisma.user.findMany({
+    orderBy: { balance: "desc" },
+    take: 5,
+  });
 
-const mockLuckyWins = [
-  {
-    name: "ShadowRunner",
-    game: "Keno",
-    value: 450.0,
-    payout: 900.0,
-    isMoney: false,
-  },
-  {
-    name: "QuantumVortex",
-    game: "Mines",
-    value: 120.0,
-    payout: 600.0,
-    isMoney: false,
-  },
-  {
-    name: "AlphaPhantom",
-    game: "Keno",
-    value: 50.0,
-    payout: 500.0,
-    isMoney: false,
-  },
-  {
-    name: "CyberGrizzly",
-    game: "Mines",
-    value: 35.0,
-    payout: 140.0,
-    isMoney: false,
-  },
-];
+  const bigWins = await prisma.bet.findMany({
+    orderBy: { payout: "desc" },
+    include: { user: true },
+    take: 5,
+  });
 
-export default function StatsPage() {
+  const luckyWins = await prisma.bet.findMany({
+    orderBy: { multiplier: "desc" },
+    include: { user: true },
+    take: 5,
+  });
+
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-slate-950 text-slate-50 py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden flex flex-col justify-start">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl aspect-square bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.04)_0%,rgba(16,185,129,0)_60%)] rounded-full blur-[80px] pointer-events-none -z-10" />
@@ -108,7 +57,7 @@ export default function StatsPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="bg-slate-900/40 border-slate-900 backdrop-blur-sm flex flex-col justify-between">
+          <Card className="bg-slate-900/40 border-slate-900 backdrop-blur-sm flex flex-col justify-start">
             <CardHeader className="p-6 pb-4">
               <div className="flex items-center justify-between mb-2">
                 <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-amber-400">
@@ -129,9 +78,9 @@ export default function StatsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="p-6 pt-0 space-y-2.5">
-              {mockLeaderboard.map((item, index) => (
+              {topUsers.map((item: any, index: number) => (
                 <div
-                  key={index}
+                  key={item.id}
                   className="bg-slate-950/40 border border-slate-900/60 rounded-xl px-4 py-3 flex items-center justify-between transition-all hover:border-slate-800/80"
                 >
                   <div className="flex items-center gap-3">
@@ -146,21 +95,21 @@ export default function StatsPage() {
                         {item.name}
                       </span>
                       <span
-                        className={`text-[10px] font-semibold uppercase tracking-wider mt-0.5 ${item.detail === "online" ? "text-emerald-400" : "text-slate-600"}`}
+                        className={`text-[10px] font-semibold uppercase tracking-wider mt-0.5 text-slate-600`}
                       >
-                        {item.detail}
+                        offline
                       </span>
                     </div>
                   </div>
                   <span className="text-sm font-black text-emerald-400 font-mono">
-                    ${item.value.toFixed(2)}
+                    ${item.balance.toFixed(2)}
                   </span>
                 </div>
               ))}
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-900/40 border-slate-900 backdrop-blur-sm flex flex-col justify-between">
+          <Card className="bg-slate-900/40 border-slate-900 backdrop-blur-sm flex flex-col justify-start">
             <CardHeader className="p-6 pb-4">
               <div className="flex items-center justify-between mb-2">
                 <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-emerald-400">
@@ -181,16 +130,16 @@ export default function StatsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="p-6 pt-0 space-y-2.5">
-              {mockBigWins.map((item, index) => (
+              {bigWins.map((item, index) => (
                 <div
-                  key={index}
+                  key={item.id}
                   className="bg-slate-950/40 border border-slate-900/60 rounded-xl px-4 py-3 flex items-center justify-between transition-all hover:border-slate-800/80"
                 >
                   <div className="flex items-center gap-3">
                     <div className="flex flex-col">
                       <span className="text-sm font-bold text-slate-200 flex items-center gap-1.5">
                         <Trophy className="w-3.5 h-3.5 text-amber-500" />
-                        {item.name}
+                        {item.user.name}
                       </span>
                       <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mt-0.5 flex items-center gap-1">
                         <Gamepad2 className="w-3 h-3" />
@@ -199,14 +148,14 @@ export default function StatsPage() {
                     </div>
                   </div>
                   <span className="text-sm font-black text-emerald-400 font-mono">
-                    +${item.value.toFixed(2)}
+                    +${item.payout.toFixed(2)}
                   </span>
                 </div>
               ))}
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-900/40 border-slate-900 backdrop-blur-sm flex flex-col justify-between">
+          <Card className="bg-slate-900/40 border-slate-900 backdrop-blur-sm flex flex-col justify-start">
             <CardHeader className="p-6 pb-4">
               <div className="flex items-center justify-between mb-2">
                 <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-rose-400">
@@ -227,16 +176,16 @@ export default function StatsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="p-6 pt-0 space-y-2.5">
-              {mockLuckyWins.map((item, index) => (
+              {luckyWins.map((item, index) => (
                 <div
-                  key={index}
+                  key={item.id}
                   className="bg-slate-950/40 border border-slate-900/60 rounded-xl px-4 py-3 flex items-center justify-between transition-all hover:border-slate-800/80"
                 >
                   <div className="flex items-center gap-3">
                     <div className="flex flex-col">
                       <span className="text-sm font-bold text-slate-200 flex items-center gap-1.5">
                         <Flame className="w-3.5 h-3.5 text-rose-500" />
-                        {item.name}
+                        {item.user.name}
                       </span>
                       <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mt-0.5 flex items-center gap-1">
                         <Gamepad2 className="w-3 h-3" />
@@ -245,7 +194,7 @@ export default function StatsPage() {
                     </div>
                   </div>
                   <span className="text-sm font-black text-rose-400 font-mono">
-                    {item.value.toFixed(2)}x
+                    {item.multiplier.toFixed(2)}x
                   </span>
                 </div>
               ))}

@@ -17,7 +17,7 @@ export type RecentWin = {
 };
 
 export function usePlinko() {
-  const { balance, setBalance, setBalanceStats, balanceStats } = useBalance();
+  const { balance, setBalance, setBalanceStats, balanceStats, winGame } = useBalance();
   const [bet, setBet] = useState("1.00");
   const [risk, setRisk] = useState<RiskLevel>("medium");
   const [rows, setRows] = useState(16);
@@ -71,7 +71,7 @@ export function usePlinko() {
     // When ball finishes animation
     const winAmount = betAmount * multiplier;
     if (winAmount > 0) {
-      setBalance((b) => b + winAmount);
+      winGame(winAmount, "Plinko", multiplier);
     }
     // Record stat
     const profit = winAmount - betAmount;

@@ -36,7 +36,7 @@ export function DiceMenu({
           </div>
           <div className="relative flex items-center">
             <Input
-              type="number"
+              type="text" inputMode="decimal"
               value={betAmount}
               onChange={handleBetChange}
               onBlur={handleBetBlur}
@@ -87,3 +87,4 @@ export function DiceMenu({
     </div>
   );
 }
+

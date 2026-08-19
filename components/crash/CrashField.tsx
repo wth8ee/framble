@@ -24,10 +24,10 @@ export function CrashField({
   const isPlaying = gameState === "playing";
 
   // Calculate dynamic coordinates for the curve based on multiplier
-  // We use log scale so it doesn't instantly shoot off screen
-  const progress = Math.min(100, Math.log(multiplier) * 30); 
-  const x = Math.min(100, progress + 10);
-  const y = 100 - Math.min(90, progress);
+  // x moves fast initially then slows down (asymptotes near 100)
+  const x = Math.min(100, (1 - 1 / multiplier) * 120);
+  // y stays flat initially then shoots up
+  const y = 100 - Math.min(100, (multiplier - 1) * 10);
 
   return (
     <div className="md:col-span-8 order-1 md:order-2 flex flex-col bg-slate-950/20 border border-slate-900/60 rounded-xl relative h-[400px] md:h-full min-h-[400px] overflow-hidden">
@@ -81,7 +81,6 @@ export function CrashField({
           <path
             d={`M0,100 Q${x * 0.6},100 ${x},${y} L${x},100 Z`}
             fill={isCrashed ? "url(#gradRed)" : "url(#gradEmerald)"}
-            className="transition-all duration-[50ms] ease-linear"
           />
           
           {/* Stroke Line */}
@@ -91,20 +90,18 @@ export function CrashField({
             stroke={isCrashed ? "#ef4444" : "#10b981"}
             strokeWidth="1.5"
             strokeLinecap="round"
-            className="transition-all duration-[50ms] ease-linear drop-shadow-md"
+            className="drop-shadow-md"
           />
 
-          {/* Rocket/Dot at the tip */}
-          {isPlaying && (
-            <circle 
-              cx={x} 
-              cy={y} 
-              r="2" 
-              fill="#fff" 
-              className="transition-all duration-[50ms] ease-linear shadow-[0_0_10px_#fff]"
-            />
-          )}
+          {/* Rocket/Dot at the tip is removed from SVG to prevent stretching into an oval */}
         </svg>
+
+        {isPlaying && (
+          <div 
+            className="absolute z-20 w-3 h-3 bg-white rounded-full shadow-[0_0_10px_#fff] -translate-x-1/2 -translate-y-1/2"
+            style={{ left: `${x}%`, top: `${y}%` }}
+          />
+        )}
       </div>
 
       {/* Main Multiplier Display */}

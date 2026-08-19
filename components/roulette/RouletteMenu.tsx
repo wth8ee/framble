@@ -3,43 +3,28 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Coins } from "lucide-react";
-import { Risk, Segments } from "@/hooks/useWheel";
+import { RouletteColor } from "@/hooks/useRoulette";
 
-interface WheelMenuProps {
+interface RouletteMenuProps {
   betAmount: string;
   setBetAmount: (bet: string) => void;
   handleBetChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleBetBlur: () => void;
-  risk: Risk;
-  setRisk: (risk: Risk) => void;
-  segments: Segments;
-  setSegments: (segments: Segments) => void;
   isSpinning: boolean;
-  spin: () => void;
+  spin: (color: RouletteColor) => void;
   balance: number;
 }
 
-export function WheelMenu({
+export function RouletteMenu({
   betAmount,
   setBetAmount,
   handleBetChange,
   handleBetBlur,
-  risk,
-  setRisk,
-  segments,
-  setSegments,
   isSpinning,
   spin,
   balance,
-}: WheelMenuProps) {
+}: RouletteMenuProps) {
   return (
     <div className="md:col-span-4 order-2 md:order-1 flex flex-col justify-between bg-slate-950/60 border border-slate-900 rounded-lg p-4 space-y-6">
       <div className="space-y-4">
@@ -120,83 +105,32 @@ export function WheelMenu({
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label
-            htmlFor="risk-level"
-            className="text-xs font-semibold text-slate-400"
-          >
-            Risk
-          </Label>
-          <Select
+        <div className="pt-2 grid grid-cols-1 gap-2">
+          <Button
             disabled={isSpinning}
-            onValueChange={(value) => setRisk(value as Risk)}
-            value={risk}
+            onClick={() => spin("red")}
+            className="w-full bg-rose-500 hover:bg-rose-600 text-white text-md font-black h-12 uppercase tracking-wide shadow-lg shadow-rose-500/10"
           >
-            <SelectTrigger
-              id="risk-level"
-              className="bg-slate-900 border-slate-800 text-slate-100 font-bold h-10 focus:ring-emerald-500"
-            >
-              <SelectValue placeholder="Select risk" />
-            </SelectTrigger>
-            <SelectContent
-              position="popper"
-              sideOffset={4}
-              className="bg-slate-900 border-slate-800 text-slate-100"
-            >
-              <SelectItem value="Low" className="focus:bg-emerald-500 focus:text-slate-950 font-semibold cursor-pointer">Low</SelectItem>
-              <SelectItem value="Medium" className="focus:bg-emerald-500 focus:text-slate-950 font-semibold cursor-pointer">Medium</SelectItem>
-              <SelectItem value="High" className="focus:bg-emerald-500 focus:text-slate-950 font-semibold cursor-pointer">High</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <Label
-            htmlFor="segments-count"
-            className="text-xs font-semibold text-slate-400"
-          >
-            Segments
-          </Label>
-          <Select
+            Bet Red (2x)
+          </Button>
+          
+          <Button
             disabled={isSpinning}
-            onValueChange={(value) => setSegments(Number(value) as Segments)}
-            value={String(segments)}
+            onClick={() => spin("green")}
+            className="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 text-md font-black h-12 uppercase tracking-wide shadow-lg shadow-emerald-500/10"
           >
-            <SelectTrigger
-              id="segments-count"
-              className="bg-slate-900 border-slate-800 text-slate-100 font-bold h-10 focus:ring-emerald-500"
-            >
-              <SelectValue placeholder="Select segments" />
-            </SelectTrigger>
-            <SelectContent
-              position="popper"
-              sideOffset={4}
-              className="bg-slate-900 border-slate-800 text-slate-100 max-h-50 overflow-y-auto"
-            >
-              {[10, 20, 30, 40, 50].map((num) => (
-                <SelectItem
-                  key={num}
-                  value={num.toString()}
-                  className="focus:bg-emerald-500 focus:text-slate-950 font-semibold cursor-pointer"
-                >
-                  {num}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+            Bet Green (14x)
+          </Button>
 
-      <div className="pt-4 md:pt-0">
-        <Button
-          disabled={isSpinning}
-          onClick={spin}
-          className="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 text-md font-black h-12 uppercase tracking-wide shadow-lg shadow-emerald-500/10"
-        >
-          {isSpinning ? "Spinning..." : "Bet"}
-        </Button>
+          <Button
+            disabled={isSpinning}
+            onClick={() => spin("black")}
+            className="w-full bg-slate-800 hover:bg-slate-700 text-white text-md font-black h-12 uppercase tracking-wide shadow-lg border border-slate-700"
+          >
+            Bet Black (2x)
+          </Button>
+        </div>
       </div>
     </div>
   );
 }
-

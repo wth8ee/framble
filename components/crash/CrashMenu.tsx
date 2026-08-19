@@ -57,7 +57,7 @@ export function CrashMenu({
           </div>
           <div className="relative flex items-center">
             <Input
-              type="number"
+              type="text" inputMode="decimal"
               value={betAmount}
               onChange={handleBetChange}
               onBlur={handleBetBlur}
@@ -92,7 +92,7 @@ export function CrashMenu({
           <Label className="text-slate-400 text-xs sm:text-sm font-bold">Auto Cashout</Label>
           <div className="relative flex items-center">
             <Input
-              type="number"
+              type="text" inputMode="decimal"
               value={autoCashout}
               onChange={handleAutoCashoutChange}
               onBlur={handleAutoCashoutBlur}
@@ -117,7 +117,7 @@ export function CrashMenu({
           size="lg"
           onClick={startGame}
           disabled={isPlaying || balance < parseFloat(betAmount)}
-          className="w-full h-12 sm:h-14 bg-blue-500 hover:bg-blue-600 text-slate-950 font-black text-base sm:text-lg uppercase tracking-wider transition-all active:scale-95 disabled:opacity-50 disabled:active:scale-100"
+          className="w-full h-12 sm:h-14 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black text-base sm:text-lg uppercase tracking-wider transition-all active:scale-95 disabled:opacity-50 disabled:active:scale-100 shadow-[0_0_20px_rgba(16,185,129,0.3)]"
         >
           {isPlaying ? "Playing..." : "Play"}
         </Button>
@@ -125,3 +125,4 @@ export function CrashMenu({
     </div>
   );
 }
+

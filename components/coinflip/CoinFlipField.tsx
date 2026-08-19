@@ -47,19 +47,21 @@ export function CoinFlipField({
 
       {/* History */}
       {history && history.length > 0 && (
-        <div className="w-full mt-auto pt-6 flex items-center justify-end gap-2 overflow-x-auto pb-2 scrollbar-hide">
+        <div className="w-full mt-auto pt-6 flex items-center justify-end gap-2 overflow-x-auto pb-2 scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-4">
           {history.map((item, idx) => (
             <div
               key={item.id}
               className={cn(
-                "flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full font-black text-sm sm:text-base shrink-0 animate-in slide-in-from-right-4 duration-300 shadow-md",
-                item.side === "Heads" 
-                  ? "bg-[#ffc800]/10 text-[#ffc800] border-2 border-[#ffc800]/50 shadow-[#ffc800]/10" 
-                  : "bg-[#5570FF]/10 text-[#5570FF] border-2 border-[#5570FF]/50 shadow-[#5570FF]/10",
-                idx === 0 ? "opacity-100 scale-110" : "opacity-50 hover:opacity-100 transition-all scale-100"
+                "relative flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full shrink-0 animate-in slide-in-from-right-4 duration-300 shadow-[inset_0_-3px_6px_rgba(0,0,0,0.3)]",
+                item.side === "Heads" ? "bg-[#ffc800]" : "bg-[#5570FF]",
+                idx === 0 ? "opacity-100 scale-110 shadow-lg" : "opacity-50 hover:opacity-100 transition-all scale-100"
               )}
             >
-              {item.side === "Heads" ? "H" : "T"}
+              {item.side === "Heads" ? (
+                <div className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[#0f172a] shadow-inner" />
+              ) : (
+                <div className="w-3 h-3 sm:w-4 sm:h-4 bg-[#0f172a] rotate-45 shadow-inner" />
+              )}
             </div>
           ))}
         </div>

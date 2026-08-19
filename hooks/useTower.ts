@@ -20,7 +20,7 @@ function generateBombs(rows: number, cols: number, bombsPerRow: number) {
 }
 
 export function useTower() {
-  const { balance, setBalance, balanceStats, setBalanceStats } = useBalance();
+  const { balance, setBalance, balanceStats, setBalanceStats, winGame } = useBalance();
 
   const [minesNumber, setMinesNumber] = useState(1);
   const [bet, setBet] = useState("1.00");
@@ -137,7 +137,7 @@ export function useTower() {
     setGameRunning(false);
     setGameEnded(true);
     const win = parseFloat(lastBet!) * getMultiplier(finalRow, minesNumber, gridCols);
-    setBalance(prev => prev + win);
+    winGame(win, "Tower", coefficient);
     const profitFromThisRound = win - Number(lastBet);
     const previousProfit = balanceStats.length > 0 ? balanceStats[balanceStats.length - 1] : 0;
     setBalanceStats([...balanceStats, previousProfit + profitFromThisRound]);
@@ -148,7 +148,7 @@ export function useTower() {
     setGameRunning(false);
     setGameEnded(true);
     const win = parseFloat(lastBet!) * coefficient;
-    setBalance(balance + win);
+    winGame(win, "Tower", coefficient);
     const profitFromThisRound = win - Number(lastBet);
     const previousProfit = balanceStats.length > 0 ? balanceStats[balanceStats.length - 1] : 0;
     setBalanceStats([...balanceStats, previousProfit + profitFromThisRound]);

@@ -41,7 +41,7 @@ export function CoinFlipMenu({
           </div>
           <div className="relative flex items-center">
             <Input
-              type="number"
+              type="text" inputMode="decimal"
               value={betAmount}
               onChange={handleBetChange}
               onBlur={handleBetBlur}
@@ -91,8 +91,8 @@ export function CoinFlipMenu({
               className={cn(
                 "flex-1 h-12 font-bold transition-all border flex items-center justify-center gap-2",
                 selectedSide === "Heads"
-                  ? "bg-[#2f4553] border-[#2f4553] text-white shadow-inner"
-                  : "bg-[#213743] border-[#213743] text-slate-300 hover:bg-[#2f4553]/60"
+                  ? "bg-[#2f4553] hover:bg-[#2f4553] border-[#2f4553] text-white shadow-inner hover:text-white"
+                  : "bg-[#213743] border-[#213743] text-slate-300 hover:bg-[#2f4553]/60 hover:text-white"
               )}
             >
               Heads
@@ -105,8 +105,8 @@ export function CoinFlipMenu({
               className={cn(
                 "flex-1 h-12 font-bold transition-all border flex items-center justify-center gap-2",
                 selectedSide === "Tails"
-                  ? "bg-[#2f4553] border-[#2f4553] text-white shadow-inner"
-                  : "bg-[#213743] border-[#213743] text-slate-300 hover:bg-[#2f4553]/60"
+                  ? "bg-[#2f4553] hover:bg-[#2f4553] border-[#2f4553] text-white shadow-inner hover:text-white"
+                  : "bg-[#213743] border-[#213743] text-slate-300 hover:bg-[#2f4553]/60 hover:text-white"
               )}
             >
               Tails
@@ -126,3 +126,4 @@ export function CoinFlipMenu({
     </div>
   );
 }
+

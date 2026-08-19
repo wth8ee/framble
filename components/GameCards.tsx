@@ -93,6 +93,17 @@ const games = [
     iconColor: "text-blue-500",
     glowClass: "bg-blue-500/10",
     hoverBorder: "hover:border-blue-500/40",
+  },
+  {
+    id: "roulette",
+    title: "Roulette",
+    provider: "Framble Original",
+    edge: "2.00%",
+    href: "/roulette",
+    icon: CircleDashed,
+    iconColor: "text-rose-500",
+    glowClass: "bg-rose-500/10",
+    hoverBorder: "hover:border-rose-500/40",
   }
 ];
 

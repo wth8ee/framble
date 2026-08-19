@@ -20,7 +20,7 @@ function getWheelPayouts(risk: Risk, segments: Segments): number[] {
 }
 
 export function useWheel() {
-  const { balance, setBalance, setBalanceStats, balanceStats } = useBalance();
+  const { balance, setBalance, setBalanceStats, balanceStats, winGame } = useBalance();
   const [betAmount, setBetAmount] = useState<string>("1.00");
   const [risk, setRisk] = useState<Risk>("Medium");
   const [segments, setSegments] = useState<Segments>(20);
@@ -83,7 +83,7 @@ export function useWheel() {
 
       const winAmount = bet * wonMultiplier;
       if (winAmount > 0) {
-        setBalance((b) => b + winAmount);
+        winGame(winAmount, "Wheel", wonMultiplier);
       }
       const profit = winAmount - bet;
       setBalanceStats((prev) => {

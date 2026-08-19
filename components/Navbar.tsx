@@ -5,23 +5,20 @@ import { Dices, User, BarChart2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import { useBalance } from "@/context/balanceContext";
+import { useSession, signOut } from "@/lib/auth-client";
+import { LogOut } from "lucide-react";
 
 export function Navbar() {
   const {
     balance,
     isStatsOpen,
     setIsStatsOpen,
-    balanceStats,
-    setBalanceStats,
-    setBalance,
   } = useBalance();
+  const { data: session } = useSession();
   const pathname = usePathname();
 
   function handleBalanceReset() {
-    if (balance < 1000) {
-      setBalance(1000);
-      setBalanceStats([]);
-    }
+    // Top-up disabled unless handled via server action for admins or specific deposits
   }
 
   return (
@@ -54,60 +51,20 @@ export function Navbar() {
             </Link>
 
             <Link
-              href="/mines"
-              className={`${pathname === "/mines" ? "text-slate-50 font-bold" : "text-slate-400"} hover:text-emerald-400 transition-colors hidden sm:inline`}
+              href="/stats"
+              className={`${pathname === "/stats" ? "text-slate-50 font-bold" : "text-slate-400"} hover:text-emerald-400 transition-colors hidden sm:inline`}
             >
-              Mines
+              Stats
             </Link>
 
-            <Link
-              href="/keno"
-              className={`${pathname === "/keno" ? "text-slate-50 font-bold" : "text-slate-400"} hover:text-emerald-400 transition-colors hidden sm:inline`}
-            >
-              Keno
-            </Link>
-
-            <Link
-              href="/plinko"
-              className={`${pathname === "/plinko" ? "text-slate-50 font-bold" : "text-slate-400"} hover:text-emerald-400 transition-colors hidden sm:inline`}
-            >
-              Plinko
-            </Link>
-
-            <Link
-              href="/tower"
-              className={`${pathname === "/tower" ? "text-slate-50 font-bold" : "text-slate-400"} hover:text-emerald-400 transition-colors hidden sm:inline`}
-            >
-              Tower
-            </Link>
-
-            <Link
-              href="/wheel"
-              className={`${pathname === "/wheel" ? "text-slate-50 font-bold" : "text-slate-400"} hover:text-emerald-400 transition-colors hidden xl:inline`}
-            >
-              Wheel
-            </Link>
-
-            <Link
-              href="/coinflip"
-              className={`${pathname === "/coinflip" ? "text-slate-50 font-bold" : "text-slate-400"} hover:text-emerald-400 transition-colors hidden xl:inline`}
-            >
-              Coin Flip
-            </Link>
-
-            <Link
-              href="/dice"
-              className={`${pathname === "/dice" ? "text-slate-50 font-bold" : "text-slate-400"} hover:text-emerald-400 transition-colors hidden xl:inline`}
-            >
-              Dice
-            </Link>
-
-            <Link
-              href="/crash"
-              className={`${pathname === "/crash" ? "text-slate-50 font-bold" : "text-slate-400"} hover:text-emerald-400 transition-colors hidden xl:inline`}
-            >
-              Crash
-            </Link>
+            {(session?.user as any)?.role === "admin" && (
+              <Link
+                href="/admin"
+                className={`${pathname === "/admin" ? "text-slate-50 font-bold" : "text-slate-400"} hover:text-red-400 transition-colors hidden sm:inline`}
+              >
+                Admin
+              </Link>
+            )}
           </nav>
         </div>
 
@@ -129,13 +86,26 @@ export function Navbar() {
             <span>${balance.toFixed(2)}</span>
           </Button>
 
-          <Button
-            size="sm"
-            className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold flex h-8 md:h-9 items-center gap-1 px-2.5 md:px-3 text-xs md:text-sm"
-          >
-            <User className="w-3.5 h-3.5 md:w-4 md:h-4" />
-            <span className="hidden sm:inline">Connect</span>
-          </Button>
+          {session ? (
+            <Button
+              onClick={() => signOut()}
+              size="sm"
+              className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold flex h-8 md:h-9 items-center gap-1 px-2.5 md:px-3 text-xs md:text-sm"
+            >
+              <LogOut className="w-3.5 h-3.5 md:w-4 md:h-4" />
+              <span className="hidden sm:inline">Logout</span>
+            </Button>
+          ) : (
+            <Link href="/auth">
+              <Button
+                size="sm"
+                className="bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold flex h-8 md:h-9 items-center gap-1 px-2.5 md:px-3 text-xs md:text-sm"
+              >
+                <User className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                <span className="hidden sm:inline">Connect</span>
+              </Button>
+            </Link>
+          )}
         </div>
       </div>
     </header>

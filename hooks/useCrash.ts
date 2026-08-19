@@ -5,7 +5,7 @@ import { playWinSound } from "@/utils/sound";
 export type CrashGameState = "idle" | "playing" | "crashed";
 
 export function useCrash() {
-  const { balance, setBalance, setBalanceStats } = useBalance();
+  const { balance, setBalance, setBalanceStats, winGame } = useBalance();
   const [betAmount, setBetAmount] = useState<string>("1.00");
   const [autoCashout, setAutoCashout] = useState<string>("2.00");
   
@@ -54,16 +54,18 @@ export function useCrash() {
     const currentMult = currentMultiplierRef.current;
     const won = currentBetRef.current * currentMult;
     setWinAmount(won);
-    setBalance((b) => b + won);
+    winGame(won, "Crash", currentMultiplierRef.current);
     playWinSound(currentMult);
     
     setBalanceStats((prev) => {
       const last = prev.length > 0 ? prev[prev.length - 1] : 0;
       return [...prev, last + (won - currentBetRef.current)];
     });
-  }, [gameState, setBalance, setBalanceStats]);
+  }, [gameState, setBalance, setBalanceStats, winGame]);
 
   const startGame = useCallback(() => {
+    if (animationRef.current) cancelAnimationFrame(animationRef.current);
+    
     const bet = parseFloat(betAmount);
     if (isNaN(bet) || bet <= 0 || bet > balance) return;
 
@@ -95,8 +97,8 @@ export function useCrash() {
 
     const tick = () => {
       const elapsed = Date.now() - startTimeRef.current;
-      // Exponential growth: 1.00 * e^(0.06 * time)
-      const currentMult = Math.max(1.00, Math.exp(0.06 * (elapsed / 1000)));
+      // Exponential growth: 1.00 * e^(0.08 * time)
+      const currentMult = Math.max(1.00, Math.exp(0.08 * (elapsed / 1000)));
       
       if (currentMult >= crashPointRef.current) {
         // Crash

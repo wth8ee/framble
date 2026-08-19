@@ -10,7 +10,7 @@ export type CoinFlipHistoryItem = {
 };
 
 export function useCoinFlip() {
-  const { balance, setBalance, setBalanceStats } = useBalance();
+  const { balance, setBalance, setBalanceStats, winGame } = useBalance();
   const [betAmount, setBetAmount] = useState<string>("1.00");
   const [selectedSide, setSelectedSide] = useState<CoinSide>("Heads");
   
@@ -73,7 +73,7 @@ export function useCoinFlip() {
 
       if (isWin) {
         const winAmount = bet * multiplier;
-        setBalance((b) => b + winAmount);
+        winGame(winAmount, "Coin Flip", 2.0);
         playWinSound(multiplier);
         
         const profit = winAmount - bet;

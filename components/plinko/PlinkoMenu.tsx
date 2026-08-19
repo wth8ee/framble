@@ -54,11 +54,11 @@ export function PlinkoMenu({
           <div className="relative flex items-center">
             <Input
               id="bet-amount"
-              type="number"
+              type="text" inputMode="decimal"
               value={bet}
               onChange={handleBetChange}
               onBlur={handleBetBlur}
-              className="bg-slate-900 border-slate-800 text-slate-100 font-bold pl-3 pr-20 h-10 focus-visible:ring-emerald-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              className="bg-slate-900 border-slate-800 text-slate-100 font-bold pl-3 pr-28 h-10 focus-visible:ring-emerald-500 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             />
             <div className="absolute right-1 flex gap-1">
               <Button
@@ -163,3 +163,4 @@ export function PlinkoMenu({
     </div>
   );
 }
+

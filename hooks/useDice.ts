@@ -5,7 +5,7 @@ import { playTickSound, playWinSound } from "@/utils/sound";
 export type DiceCondition = "Roll Over" | "Roll Under";
 
 export function useDice() {
-  const { balance, setBalance, setBalanceStats } = useBalance();
+  const { balance, setBalance, setBalanceStats, winGame } = useBalance();
   const [betAmount, setBetAmount] = useState<string>("1.00");
   
   const [winChance, setWinChance] = useState<number>(50.00);
@@ -75,7 +75,7 @@ export function useDice() {
 
       if (isWin) {
         const winAmount = bet * multiplier;
-        setBalance((b) => b + winAmount);
+        winGame(winAmount, "Dice", multiplier);
         playWinSound(multiplier);
         
         const profit = winAmount - bet;

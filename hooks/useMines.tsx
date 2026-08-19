@@ -10,7 +10,7 @@ import { useState } from "react";
 import { useBalance } from "@/context/balanceContext";
 
 export function useMines() {
-  const { balance, setBalance, balanceStats, setBalanceStats } = useBalance();
+  const { balance, setBalance, balanceStats, setBalanceStats, winGame } = useBalance();
 
   const [cells, setCells] = useState(Array(25).fill(null));
   const [bombs, setBombs] = useState<number[]>([]);
@@ -81,7 +81,7 @@ export function useMines() {
   function cashOut() {
     setGameRunning(false);
     const win = parseFloat(bet) * coefficient;
-    setBalance(balance + win);
+    winGame(win, "Mines", coefficient);
     const profitFromThisRound = win - Number(lastBet);
     const previousProfit =
       balanceStats.length > 0 ? balanceStats[balanceStats.length - 1] : 0;

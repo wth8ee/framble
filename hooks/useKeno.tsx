@@ -7,7 +7,7 @@ import { selectFromMany } from "@/lib/shared/selectFromMany";
 import { useEffect, useRef, useState } from "react";
 
 export function useKeno() {
-  const { balance, setBalance, balanceStats, setBalanceStats } = useBalance();
+  const { balance, setBalance, balanceStats, setBalanceStats, winGame } = useBalance();
 
   const [cells, setCells] = useState(Array(25).fill(null));
   const [gameRunning, setGameRunning] = useState(false);
@@ -147,7 +147,7 @@ export function useKeno() {
           setIsWinBannerOpen(true);
           const win = Number(currentBet) * finalMultiplier;
           balanceRef.current = balanceRef.current + win;
-          setBalance((prev) => prev + win);
+          winGame(win, "Keno", win / Number(bet));
           const profitFromThisRound = win - Number(currentBet);
           setBalanceStats((prev) => {
             const previousProfit = prev.length > 0 ? prev[prev.length - 1] : 0;
